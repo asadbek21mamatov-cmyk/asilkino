@@ -324,14 +324,18 @@ function MovieForm({ initial, onClose, onSaved }: { initial: Movie; onClose: () 
           </Field>
 
           {/* Video URL + Direct MP4 File Upload */}
-          <Field label={m.category === "serial" ? "Asosiy video fayl yoki URL" : "Kino video fayli (.mp4 / .m3u8 / URL) *"} full>
+          <Field label={m.category === "serial" ? "Asosiy video fayl yoki URL" : "Kino video fayli (.mp4 / .m3u8 / iframe embed) *"} full>
             <div className="flex flex-col gap-2 sm:flex-row">
               <input
                 className="input flex-1"
                 required={m.category !== "serial"}
                 value={m.videoUrl}
-                onChange={(e) => set("videoUrl", e.target.value)}
-                placeholder="https://.../kino-uzbek-1080p.mp4 yoki .m3u8 oqim havolasi"
+                onChange={(e) => {
+                  const val = e.target.value;
+                  const iframeSrc = val.toLowerCase().includes("<iframe") ? val.match(/src=["']([^"']+)["']/i)?.[1] : null;
+                  set("videoUrl", iframeSrc ? iframeSrc.trim() : val);
+                }}
+                placeholder="https://.../kino-uzbek-1080p.mp4, .m3u8 oqim yoki <iframe ...> kodi"
               />
               {isSupabaseEnabled && (
                 <label className="btn btn-primary shrink-0 cursor-pointer justify-center">
@@ -563,6 +567,28 @@ export default function AdminPage() {
                 <td className="p-3">{m.episodes.length || "—"}</td>
                 <td className="p-3">
                   <div className="flex justify-end gap-1">
+                    <button
+                      onClick={async () => {
+                        const nextUrl = prompt(
+                          `"${m.title}" uchun to'liq kino havolasini kiriting (.mp4, .m3u8 yoki <iframe ...> kodi):`,
+                          m.videoUrl
+                        );
+                        if (nextUrl === null || nextUrl.trim() === m.videoUrl) return;
+                        const clean = nextUrl.toLowerCase().includes("<iframe")
+                          ? nextUrl.match(/src=["']([^"']+)["']/i)?.[1]?.trim() || nextUrl.trim()
+                          : nextUrl.trim();
+                        try {
+                          await saveMovie({ ...m, videoUrl: clean });
+                          await reload();
+                        } catch (err) {
+                          alert(err instanceof Error ? err.message : "Saqlashda xatolik");
+                        }
+                      }}
+                      className="rounded-lg border border-line bg-panel-2 px-2.5 py-1.5 text-xs font-semibold hover:border-accent hover:text-accent"
+                      title="Tezkor video havola ulash"
+                    >
+                      🎬 Video ulash
+                    </button>
                     <button onClick={() => setEditing(m)} className="rounded-lg p-2 hover:bg-panel-2 hover:text-accent" aria-label="Tahrirlash">
                       <Edit3 className="h-4 w-4" />
                     </button>

@@ -94,6 +94,16 @@ function extractYouTubeId(url: string): string | null {
   return m ? m[1] : null;
 }
 
+function normalizeMediaSrc(raw: string): string {
+  const trimmed = (raw || "").trim();
+  if (!trimmed) return "";
+  if (trimmed.toLowerCase().includes("<iframe")) {
+    const m = trimmed.match(/src=["']([^"']+)["']/i);
+    if (m?.[1]) return m[1].trim();
+  }
+  return trimmed;
+}
+
 function detectSourceKind(src: string): "empty" | "youtube" | "hls" | "video" | "embed" {
   if (!src) return "empty";
   if (extractYouTubeId(src)) return "youtube";
@@ -109,18 +119,21 @@ function detectSourceKind(src: string): "empty" | "youtube" | "hls" | "video" | 
 }
 
 export default function NetflixPlayer({
-  src,
+  src: rawSrc,
   poster,
   title,
   studio,
   autoPlay = false,
   onBack,
 }: NetflixPlayerProps) {
+  const src = normalizeMediaSrc(rawSrc);
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const ytMountRef = useRef<HTMLDivElement>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const ytPlayerRef = useRef<any>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const hlsRef = useRef<any>(null);
   const progressRef = useRef<HTMLDivElement>(null);
   const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const skipFlashTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -144,6 +157,9 @@ export default function NetflixPlayer({
   const [playbackSpeed, setPlaybackSpeed] = useState(1);
   const [showSpeedMenu, setShowSpeedMenu] = useState(false);
   const [showQualityMenu, setShowQualityMenu] = useState(false);
+  const [showAudioMenu, setShowAudioMenu] = useState(false);
+  const [audioTracks, setAudioTracks] = useState<{ id: number; name: string }[]>([]);
+  const [activeAudioTrack, setActiveAudioTrack] = useState(0);
   const [quality, setQuality] = useState("1080p");
   const [hoverTime, setHoverTime] = useState<number | null>(null);
   const [hoverPosition, setHoverPosition] = useState(0);
@@ -205,10 +221,25 @@ export default function NetflixPlayer({
           if (cancelled || !window.Hls) return;
           if (window.Hls.isSupported()) {
             hlsInstance = new window.Hls();
+            hlsRef.current = hlsInstance;
             hlsInstance.loadSource(src);
             hlsInstance.attachMedia(video);
             hlsInstance.on(window.Hls.Events.MANIFEST_PARSED, () => {
               setIsLoading(false);
+              const tracks = (hlsInstance.audioTracks || []).map(
+                (t: { name?: string; lang?: string }, idx: number) => ({
+                  id: idx,
+                  name: t.name || t.lang || `${idx + 1}-ovoz yo'lagi`,
+                })
+              );
+              setAudioTracks(tracks);
+              const uzIdx = tracks.findIndex((t: { name: string }) =>
+                /uz|o'zbek|ozbek|узб/i.test(t.name)
+              );
+              if (uzIdx >= 0) {
+                hlsInstance.audioTrack = uzIdx;
+                setActiveAudioTrack(uzIdx);
+              }
               if (autoPlay) video.play().catch(() => {});
             });
             hlsInstance.on(window.Hls.Events.ERROR, (_e: unknown, data: { fatal?: boolean }) => {
@@ -890,6 +921,47 @@ export default function NetflixPlayer({
 
             {/* Right Controls */}
             <div className="flex items-center gap-2 sm:gap-3">
+              {/* Multi-Audio Track Switcher (HLS streams with Uzbek/Russian/English tracks) */}
+              {audioTracks.length > 1 && (
+                <div className="relative">
+                  <button
+                    onClick={() => {
+                      setShowAudioMenu(!showAudioMenu);
+                      setShowSpeedMenu(false);
+                      setShowQualityMenu(false);
+                    }}
+                    className="rounded-md border border-white/20 bg-white/10 px-2 py-1 text-xs font-semibold text-white/95 hover:border-[#E50914] transition"
+                    title="Ovoz tilini tanlash"
+                  >
+                    🎧 {audioTracks[activeAudioTrack]?.name || "Til"}
+                  </button>
+                  {showAudioMenu && (
+                    <div className="absolute bottom-full right-0 mb-2 w-40 rounded-xl border border-white/15 bg-black/95 p-1 shadow-2xl backdrop-blur-md">
+                      <div className="px-3 py-1.5 text-[10px] font-bold uppercase text-white/40">
+                        Ovoz tili
+                      </div>
+                      {audioTracks.map((tr) => (
+                        <button
+                          key={tr.id}
+                          onClick={() => {
+                            if (hlsRef.current) hlsRef.current.audioTrack = tr.id;
+                            setActiveAudioTrack(tr.id);
+                            setShowAudioMenu(false);
+                          }}
+                          className={`w-full rounded-md px-3 py-1.5 text-left text-xs transition ${
+                            activeAudioTrack === tr.id
+                              ? "bg-[#E50914] font-bold text-white"
+                              : "text-white/80 hover:bg-white/10 hover:text-white"
+                          }`}
+                        >
+                          {tr.name}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+
               {/* Speed */}
               <div className="relative">
                 <button
