@@ -1,7 +1,15 @@
+"use client";
+
 import Link from "next/link";
 import { Eye, Play, Star } from "lucide-react";
 import type { Movie } from "@/lib/types";
 import { formatViews } from "@/lib/store";
+
+const FALLBACK_POSTER =
+  "data:image/svg+xml;utf8," +
+  encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="600" viewBox="0 0 400 600"><rect width="400" height="600" fill="#141821"/><rect x="20" y="20" width="360" height="560" rx="16" fill="none" stroke="#262c3a" stroke-width="2"/><circle cx="200" cy="270" r="44" fill="#e50914"/><polygon points="190,248 190,292 224,270" fill="#ffffff"/><text x="200" y="355" text-anchor="middle" fill="#e7e9ee" font-family="sans-serif" font-size="22" font-weight="bold">AsilKino</text></svg>`
+  );
 
 export default function MovieCard({ movie }: { movie: Movie }) {
   return (
@@ -9,9 +17,17 @@ export default function MovieCard({ movie }: { movie: Movie }) {
       <div className="relative aspect-[2/3] overflow-hidden rounded-xl border border-line bg-panel">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src={movie.poster}
+          src={movie.poster || FALLBACK_POSTER}
           alt={movie.title}
           loading="lazy"
+          onError={(e) => {
+            const img = e.currentTarget;
+            if (movie.backdrop && img.src !== movie.backdrop) {
+              img.src = movie.backdrop;
+            } else if (img.src !== FALLBACK_POSTER) {
+              img.src = FALLBACK_POSTER;
+            }
+          }}
           className="h-full w-full object-cover transition duration-500 group-hover:scale-110 group-hover:brightness-50"
         />
         <div className="absolute left-2 top-2 flex flex-col gap-1">

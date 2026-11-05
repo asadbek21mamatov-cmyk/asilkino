@@ -1,15 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
-import { Edit3, LogOut, Plus, RotateCcw, Save, Search, ShieldCheck, Trash2, X } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Edit3, Loader2, LogOut, Plus, RotateCcw, Save, Search, ShieldCheck, Trash2, Upload, X } from "lucide-react";
 import { useMovies } from "@/lib/movies-context";
 import { deleteMovie, resetLocalDemo, saveMovie, slugify } from "@/lib/store";
 import { isSupabaseEnabled, supabase } from "@/lib/supabase";
-import { ALL_COUNTRIES, ALL_GENRES, CATEGORY_LABELS, type Category, type Episode, type Movie } from "@/lib/types";
+import { ALL_COUNTRIES, ALL_GENRES, ALL_STUDIOS, CATEGORY_LABELS, type Category, type Episode, type Movie } from "@/lib/types";
 
-// Demo rejim paroli (.env.local da NEXT_PUBLIC_ADMIN_PASSWORD bilan o'zgartiring).
-// Diqqat: bu faqat demo/LocalStorage rejimi uchun. Haqiqiy saytda Supabase Auth ishlatiladi.
 const DEMO_PASSWORD = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || "admin123";
 
 const emptyMovie = (): Movie => ({
@@ -22,11 +20,11 @@ const emptyMovie = (): Movie => ({
   studio: "Marvel Studios",
   year: new Date().getFullYear(),
   country: "AQSH",
-  duration: "1 s 45 daq",
-  quality: "1080p Full HD",
+  duration: "2 s 15 daq",
+  quality: "4K Ultra HD",
   ageRating: "16+",
-  imdb: 7,
-  kp: 7,
+  imdb: 7.8,
+  kp: 7.6,
   views: 0,
   isPremiere: true,
   isFeatured: false,
@@ -40,6 +38,22 @@ const emptyMovie = (): Movie => ({
   episodes: [],
   createdAt: new Date().toISOString(),
 });
+
+async function uploadToStorage(file: File, folder: "videos" | "posters" | "backdrops"): Promise<string> {
+  if (!supabase) throw new Error("Supabase ulanmagan");
+  const ext = file.name.split(".").pop()?.toLowerCase() || "bin";
+  const safeBase = slugify(file.name.replace(/\.[^.]+$/, "")) || "media";
+  const filePath = `${folder}/${Date.now()}-${safeBase}.${ext}`;
+
+  const { error } = await supabase.storage.from("movies-media").upload(filePath, file, {
+    cacheControl: "3600",
+    upsert: true,
+  });
+  if (error) throw error;
+
+  const { data } = supabase.storage.from("movies-media").getPublicUrl(filePath);
+  return data.publicUrl;
+}
 
 function Login({ onOk }: { onOk: () => void }) {
   const [email, setEmail] = useState("");
@@ -73,13 +87,29 @@ function Login({ onOk }: { onOk: () => void }) {
       <ShieldCheck className="mx-auto h-10 w-10 text-accent" />
       <h1 className="mt-3 text-center text-xl font-bold">Admin panelga kirish</h1>
       <p className="mt-1 text-center text-xs text-muted">
-        {isSupabaseEnabled ? "Supabase hisobingiz bilan kiring" : "Demo rejim: standart parol — admin123"}
+        {isSupabaseEnabled ? "Supabase Admin hisobi bilan kiring" : "Demo rejim: standart parol — admin123"}
       </p>
       <div className="mt-5 space-y-3">
-        {isSupabaseEnabled && <input className="input" type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />}
-        <input className="input" type="password" placeholder="Parol" value={password} onChange={(e) => setPassword(e.target.value)} required />
+        {isSupabaseEnabled && (
+          <input
+            className="input"
+            type="email"
+            placeholder="admin@asilkino.uz"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        )}
+        <input
+          className="input"
+          type="password"
+          placeholder="Parol"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
         {err && <p className="text-sm text-accent">{err}</p>}
-        <button className="btn btn-primary w-full" disabled={busy}>
+        <button className="btn btn-primary w-full justify-center" disabled={busy}>
           {busy ? "Kirilmoqda..." : "Kirish"}
         </button>
       </div>
@@ -99,6 +129,7 @@ function Field({ label, children, full }: { label: string; children: React.React
 function MovieForm({ initial, onClose, onSaved }: { initial: Movie; onClose: () => void; onSaved: () => void }) {
   const [m, setM] = useState<Movie>(initial);
   const [busy, setBusy] = useState(false);
+  const [uploadingField, setUploadingField] = useState<string | null>(null);
   const [err, setErr] = useState("");
   const set = <K extends keyof Movie>(k: K, v: Movie[K]) => setM((p) => ({ ...p, [k]: v }));
 
@@ -114,10 +145,29 @@ function MovieForm({ initial, onClose, onSaved }: { initial: Movie; onClose: () 
         season: last?.season ?? 1,
         episode: (last?.episode ?? 0) + 1,
         title: `${(last?.episode ?? 0) + 1}-qism`,
-        duration: "45 daq",
+        duration: "50 daq",
         videoUrl: "",
       },
     ]);
+  };
+
+  const handleFileUpload = async (
+    file: File | undefined,
+    folder: "videos" | "posters" | "backdrops",
+    fieldKey: string,
+    onUrl: (url: string) => void
+  ) => {
+    if (!file) return;
+    setErr("");
+    setUploadingField(fieldKey);
+    try {
+      const publicUrl = await uploadToStorage(file, folder);
+      onUrl(publicUrl);
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : "Fayl yuklashda xatolik");
+    } finally {
+      setUploadingField(null);
+    }
   };
 
   const submit = async (e: React.FormEvent) => {
@@ -142,13 +192,17 @@ function MovieForm({ initial, onClose, onSaved }: { initial: Movie; onClose: () 
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/80 p-3 sm:p-8">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85 p-3 sm:p-8">
       <form onSubmit={submit} className="mx-auto max-w-3xl animate-fade-in rounded-2xl border border-line bg-panel p-5">
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-lg font-bold">{initial.id ? "Kinoni tahrirlash" : "Yangi kino qo'shish"}</h2>
+          <h2 className="text-lg font-bold">{initial.id ? "Kinoni tahrirlash" : "Yangi kino yuklash"}</h2>
           <button type="button" onClick={onClose} className="rounded-full p-1 hover:bg-white/10" aria-label="Yopish">
             <X className="h-5 w-5" />
           </button>
+        </div>
+
+        <div className="mb-4 rounded-xl border border-accent/30 bg-accent/10 p-3 text-xs text-gray-200">
+          <strong>Netflix Player qo&apos;llab-quvvatlaydigan formatlar:</strong> kompyuterdan bevosita <code>.mp4</code> / <code>.webm</code> fayl yuklash, HLS (<code>.m3u8</code>) oqim manzili, tashqi video-balansyor (Movee, Kodik, VK, Ok.ru) embed manzili yoki YouTube oqimi.
         </div>
 
         <div className="grid gap-3 sm:grid-cols-2">
@@ -169,9 +223,9 @@ function MovieForm({ initial, onClose, onSaved }: { initial: Movie; onClose: () 
             </select>
           </Field>
           <Field label="Kino studiya">
-            <input className="input" list="studios" value={m.studio} onChange={(e) => set("studio", e.target.value)} placeholder="Marvel Studios, DC, Warner Bros..." />
+            <input className="input" list="studios" value={m.studio} onChange={(e) => set("studio", e.target.value)} placeholder="Marvel Studios, DC Studios, Warner Bros..." />
             <datalist id="studios">
-              {["Marvel Studios", "DC Studios", "20th Century Fox", "Warner Bros.", "Universal Pictures", "Sony Pictures", "Paramount Pictures", "Walt Disney Pictures"].map((s) => (
+              {ALL_STUDIOS.map((s) => (
                 <option key={s} value={s} />
               ))}
             </datalist>
@@ -232,18 +286,79 @@ function MovieForm({ initial, onClose, onSaved }: { initial: Movie; onClose: () 
           <Field label="Tavsif (sujet) *" full>
             <textarea className="input min-h-24" required value={m.description} onChange={(e) => set("description", e.target.value)} />
           </Field>
-          <Field label="Poster rasmi URL (vertikal)">
-            <input className="input" type="url" value={m.poster} onChange={(e) => set("poster", e.target.value)} placeholder="https://..." />
+
+          {/* Poster URL + File Upload */}
+          <Field label="Poster rasmi (vertikal URL yoki fayl)">
+            <div className="flex gap-2">
+              <input className="input" type="url" value={m.poster} onChange={(e) => set("poster", e.target.value)} placeholder="https://..." />
+              {isSupabaseEnabled && (
+                <label className="btn btn-ghost shrink-0 cursor-pointer !px-3" title="Kompyuterdan rasm yuklash">
+                  {uploadingField === "poster" ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => handleFileUpload(e.target.files?.[0], "posters", "poster", (u) => set("poster", u))}
+                  />
+                </label>
+              )}
+            </div>
           </Field>
-          <Field label="Fon rasmi URL (gorizontal)">
-            <input className="input" type="url" value={m.backdrop} onChange={(e) => set("backdrop", e.target.value)} placeholder="https://..." />
+
+          {/* Backdrop URL + File Upload */}
+          <Field label="Fon rasmi (gorizontal URL yoki fayl)">
+            <div className="flex gap-2">
+              <input className="input" type="url" value={m.backdrop} onChange={(e) => set("backdrop", e.target.value)} placeholder="https://..." />
+              {isSupabaseEnabled && (
+                <label className="btn btn-ghost shrink-0 cursor-pointer !px-3" title="Kompyuterdan fon rasmi yuklash">
+                  {uploadingField === "backdrop" ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => handleFileUpload(e.target.files?.[0], "backdrops", "backdrop", (u) => set("backdrop", u))}
+                  />
+                </label>
+              )}
+            </div>
           </Field>
-          <Field label={m.category === "serial" ? "Asosiy video URL (qismlar bo'lmasa)" : "Video URL * (MP4, YouTube yoki embed)"}>
-            <input className="input" required={m.category !== "serial"} value={m.videoUrl} onChange={(e) => set("videoUrl", e.target.value)} placeholder="https://.../film.mp4" />
+
+          {/* Video URL + Direct MP4 File Upload */}
+          <Field label={m.category === "serial" ? "Asosiy video fayl yoki URL" : "Kino video fayli (.mp4 / .m3u8 / URL) *"} full>
+            <div className="flex flex-col gap-2 sm:flex-row">
+              <input
+                className="input flex-1"
+                required={m.category !== "serial"}
+                value={m.videoUrl}
+                onChange={(e) => set("videoUrl", e.target.value)}
+                placeholder="https://.../kino-uzbek-1080p.mp4 yoki .m3u8 oqim havolasi"
+              />
+              {isSupabaseEnabled && (
+                <label className="btn btn-primary shrink-0 cursor-pointer justify-center">
+                  {uploadingField === "video" ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" /> Yuklanmoqda...
+                    </>
+                  ) : (
+                    <>
+                      <Upload className="h-4 w-4" /> MP4 yuklash
+                    </>
+                  )}
+                  <input
+                    type="file"
+                    accept="video/mp4,video/webm,video/x-matroska,video/*"
+                    className="hidden"
+                    onChange={(e) => handleFileUpload(e.target.files?.[0], "videos", "video", (u) => set("videoUrl", u))}
+                  />
+                </label>
+              )}
+            </div>
           </Field>
-          <Field label="Treyler URL (YouTube yoki MP4)">
-            <input className="input" value={m.trailerUrl} onChange={(e) => set("trailerUrl", e.target.value)} placeholder="https://youtube.com/watch?v=..." />
+
+          <Field label="Treyler URL (ixtiyoriy)" full>
+            <input className="input" value={m.trailerUrl} onChange={(e) => set("trailerUrl", e.target.value)} placeholder="https://youtube.com/watch?v=... yoki treyler.mp4" />
           </Field>
+
           <div className="flex gap-5 sm:col-span-2">
             <label className="flex items-center gap-2 text-sm">
               <input type="checkbox" checked={m.isPremiere} onChange={(e) => set("isPremiere", e.target.checked)} className="accent-[#e50914]" /> Premyera
@@ -257,18 +372,29 @@ function MovieForm({ initial, onClose, onSaved }: { initial: Movie; onClose: () 
         {(m.category === "serial" || m.episodes.length > 0) && (
           <div className="mt-5 rounded-xl border border-line p-3">
             <div className="mb-2 flex items-center justify-between">
-              <h3 className="font-semibold">Qismlar ({m.episodes.length})</h3>
+              <h3 className="font-semibold">Serial qismlari ({m.episodes.length})</h3>
               <button type="button" onClick={addEp} className="btn btn-ghost !py-1.5 text-xs">
                 <Plus className="h-4 w-4" /> Qism qo&apos;shish
               </button>
             </div>
             <div className="space-y-2">
               {m.episodes.map((ep, i) => (
-                <div key={ep.id} className="grid grid-cols-[60px_60px_1fr_auto] gap-2 sm:grid-cols-[60px_60px_1fr_2fr_auto]">
+                <div key={ep.id} className="grid grid-cols-[56px_56px_1fr_auto_auto] gap-2 sm:grid-cols-[60px_60px_1fr_2fr_auto_auto]">
                   <input className="input" type="number" min={1} title="Fasl" value={ep.season} onChange={(e) => setEp(i, { season: Number(e.target.value) })} />
                   <input className="input" type="number" min={1} title="Qism" value={ep.episode} onChange={(e) => setEp(i, { episode: Number(e.target.value) })} />
-                  <input className="input hidden sm:block" placeholder="Nomi" value={ep.title} onChange={(e) => setEp(i, { title: e.target.value })} />
-                  <input className="input" placeholder="Video URL" required value={ep.videoUrl} onChange={(e) => setEp(i, { videoUrl: e.target.value })} />
+                  <input className="input hidden sm:block" placeholder="Qism nomi" value={ep.title} onChange={(e) => setEp(i, { title: e.target.value })} />
+                  <input className="input" placeholder="Video URL (.mp4 / .m3u8)" required value={ep.videoUrl} onChange={(e) => setEp(i, { videoUrl: e.target.value })} />
+                  {isSupabaseEnabled && (
+                    <label className="btn btn-ghost cursor-pointer !px-2.5" title="Qism videosini yuklash">
+                      {uploadingField === `ep-${i}` ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
+                      <input
+                        type="file"
+                        accept="video/*"
+                        className="hidden"
+                        onChange={(e) => handleFileUpload(e.target.files?.[0], "videos", `ep-${i}`, (u) => setEp(i, { videoUrl: u }))}
+                      />
+                    </label>
+                  )}
                   <button type="button" onClick={() => set("episodes", m.episodes.filter((_, k) => k !== i))} className="rounded-lg px-2 text-muted hover:text-accent" aria-label="O'chirish">
                     <Trash2 className="h-4 w-4" />
                   </button>
@@ -282,7 +408,7 @@ function MovieForm({ initial, onClose, onSaved }: { initial: Movie; onClose: () 
         {err && <p className="mt-3 text-sm text-accent">{err}</p>}
         <div className="mt-5 flex justify-end gap-2">
           <button type="button" onClick={onClose} className="btn btn-ghost">Bekor qilish</button>
-          <button className="btn btn-primary" disabled={busy}>
+          <button className="btn btn-primary" disabled={busy || Boolean(uploadingField)}>
             <Save className="h-4 w-4" /> {busy ? "Saqlanmoqda..." : "Saqlash"}
           </button>
         </div>
@@ -297,10 +423,26 @@ export default function AdminPage() {
   const [editing, setEditing] = useState<Movie | null>(null);
   const [q, setQ] = useState("");
   const [cat, setCat] = useState("");
+  const [studioFilter, setStudioFilter] = useState("");
+
+  useEffect(() => {
+    if (!supabase) return;
+    supabase.auth.getSession().then(({ data }) => {
+      if (data.session?.user?.app_metadata?.role === "admin") {
+        setAuthed(true);
+      }
+    });
+  }, []);
 
   const list = useMemo(
-    () => movies.filter((m) => (!cat || m.category === cat) && m.title.toLowerCase().includes(q.toLowerCase())),
-    [movies, q, cat],
+    () =>
+      movies.filter(
+        (m) =>
+          (!cat || m.category === cat) &&
+          (!studioFilter || m.studio === studioFilter) &&
+          m.title.toLowerCase().includes(q.toLowerCase())
+      ),
+    [movies, q, cat, studioFilter]
   );
 
   if (!authed) return <Login onOk={() => setAuthed(true)} />;
@@ -322,7 +464,7 @@ export default function AdminPage() {
   };
 
   const stats = [
-    ["Jami", movies.length],
+    ["Jami kinolar", movies.length],
     ["Tarjima kinolar", movies.filter((m) => m.category === "tarjima").length],
     ["Seriallar", movies.filter((m) => m.category === "serial").length],
     ["Multfilmlar", movies.filter((m) => m.category === "multfilm").length],
@@ -334,7 +476,7 @@ export default function AdminPage() {
         <div>
           <h1 className="text-2xl font-bold">Admin panel</h1>
           <p className="text-sm text-muted">
-            Rejim: {isSupabaseEnabled ? "Supabase ma'lumotlar bazasi" : "Demo (brauzer LocalStorage)"}
+            Rejim: {isSupabaseEnabled ? "Supabase Cloud (Database + Storage ulangan)" : "Demo (brauzer LocalStorage)"}
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -352,7 +494,7 @@ export default function AdminPage() {
             </button>
           )}
           <button className="btn btn-primary" onClick={() => setEditing(emptyMovie())}>
-            <Plus className="h-4 w-4" /> Kino qo&apos;shish
+            <Plus className="h-4 w-4" /> Kino yuklash
           </button>
           <button className="btn btn-ghost" onClick={logout}>
             <LogOut className="h-4 w-4" /> Chiqish
@@ -374,6 +516,12 @@ export default function AdminPage() {
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
           <input className="input !pl-9" placeholder="Nomi bo'yicha qidirish..." value={q} onChange={(e) => setQ(e.target.value)} />
         </div>
+        <select className="input !w-auto" value={studioFilter} onChange={(e) => setStudioFilter(e.target.value)}>
+          <option value="">Barcha studiyalar</option>
+          {ALL_STUDIOS.map((s) => (
+            <option key={s} value={s}>{s}</option>
+          ))}
+        </select>
         <select className="input !w-auto" value={cat} onChange={(e) => setCat(e.target.value)}>
           <option value="">Barcha turlar</option>
           {(Object.keys(CATEGORY_LABELS) as Category[]).map((c) => <option key={c} value={c}>{CATEGORY_LABELS[c]}</option>)}
@@ -381,10 +529,11 @@ export default function AdminPage() {
       </div>
 
       <div className="mt-4 overflow-x-auto rounded-xl border border-line">
-        <table className="w-full min-w-[640px] text-sm">
+        <table className="w-full min-w-[700px] text-sm">
           <thead className="bg-panel-2 text-left text-xs uppercase text-muted">
             <tr>
               <th className="p-3">Kino</th>
+              <th className="p-3">Studiya</th>
               <th className="p-3">Turi</th>
               <th className="p-3">Yili</th>
               <th className="p-3">IMDb</th>
@@ -407,6 +556,7 @@ export default function AdminPage() {
                     </div>
                   </div>
                 </td>
+                <td className="p-3 font-medium text-gray-300">{m.studio}</td>
                 <td className="p-3 text-muted">{CATEGORY_LABELS[m.category]}</td>
                 <td className="p-3">{m.year}</td>
                 <td className="p-3 text-gold">{m.imdb.toFixed(1)}</td>
@@ -425,7 +575,7 @@ export default function AdminPage() {
             ))}
             {!list.length && (
               <tr>
-                <td colSpan={6} className="p-8 text-center text-muted">Kino topilmadi</td>
+                <td colSpan={7} className="p-8 text-center text-muted">Kino topilmadi</td>
               </tr>
             )}
           </tbody>

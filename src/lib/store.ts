@@ -2,7 +2,7 @@ import { DEMO_MOVIES } from "./demo-data";
 import { supabase } from "./supabase";
 import type { Category, Episode, Movie } from "./types";
 
-const STORAGE_KEY = "asilkino_movies_v1";
+const STORAGE_KEY = "asilkino_movies_v3";
 
 /* ---------- Supabase qatorlarini Movie turiga o'girish ---------- */
 /* eslint-disable @typescript-eslint/no-explicit-any */

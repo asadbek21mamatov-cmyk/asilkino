@@ -50,9 +50,10 @@ export const ALL_STUDIOS = [
   "20th Century Fox",
   "Warner Bros.",
   "Universal Pictures",
-  "Sony Pictures",
   "Paramount Pictures",
+  "Sony Pictures",
   "Walt Disney Pictures",
+  "Netflix Studios",
 ];
 
 export const ALL_GENRES = [

@@ -521,6 +521,18 @@
 
     <!-- FILTERS -->
     <div class="filter-panel">
+      <select class="select-custom" id="filterStudio" onchange="applyFilters()">
+        <option value="">Barcha studiyalar</option>
+        <option value="Marvel Studios">Marvel Studios</option>
+        <option value="DC Studios">DC Studios</option>
+        <option value="20th Century Fox">20th Century Fox</option>
+        <option value="Warner Bros.">Warner Bros.</option>
+        <option value="Universal Pictures">Universal Pictures</option>
+        <option value="Paramount Pictures">Paramount Pictures</option>
+        <option value="Sony Pictures">Sony Pictures</option>
+        <option value="Walt Disney Pictures">Walt Disney Pictures</option>
+        <option value="Netflix Studios">Netflix Studios</option>
+      </select>
       <select class="select-custom" id="filterCategory" onchange="applyFilters()">
         <option value="">Barcha turlar</option>
         <option value="tarjima">Tarjima kinolar</option>
@@ -619,10 +631,7 @@
     <p>© 2026 <span>AsilKino</span> — Asilmedia.org uslubidagi onlayn kinoteatr. Barcha huquqlar himoyalangan.</p>
   </footer>
 
-  <script>
-    const V = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample";
-
-    // 12 ta tayyor kino ma'lumotlari
+    <script>
     const MOVIES = [
   {
     "id": "1",
@@ -638,17 +647,40 @@
     "year": 2019,
     "country": "AQSH",
     "imdb": 8.4,
-    "views": 489300,
+    "views": 689300,
     "quality": "4K Ultra HD",
-    "premiere": true,
-    "poster": "https://image.tmdb.org/t/p/w600_and_h900_bestv2/or06FN3Dka5tukK1e9sl16pB3iy.jpg",
-    "backdrop": "https://image.tmdb.org/t/p/original/7RyHsO4yDXtBv1zUU3mTpHeQ0d5.jpg",
-    "video": "https://vjs.zencdn.net/v/oceans.mp4",
-    "desc": "Tanos koinotdagi barcha tirik mavjudotlarning yarmini yo'q qilgach, tirik qolgan Qasoskorlar oxirgi imkoniyatdan foydalanib, yo'qotilganlarni qaytarish uchun o'tmishga qaytishga va eng buyuk jangga kirishga majbur bo'ladilar.",
+    "premiere": false,
+    "poster": "https://m.media-amazon.com/images/M/MV5BMTc5MDE2ODcwNV5BMl5BanBnXkFtZTgwMzI2NzQ2NzM@._V1_FMjpg_UX800_.jpg",
+    "backdrop": "https://i.ytimg.com/vi/TcMBFSGVi1c/maxresdefault.jpg",
+    "video": "https://www.youtube.com/watch?v=TcMBFSGVi1c",
+    "desc": "Tanos Cheksizlik toshlari yordamida koinotdagi barcha tirik mavjudotlarning yarmini yo'q qilgach, tirik qolgan Qasoskorlar so'nggi imkoniyatni ishga solib, vaqt orqali o'tmishga qaytishadi va insoniyat taqdiri uchun eng buyuk jangga kirishadilar.",
     "episodes": []
   },
   {
     "id": "2",
+    "title": "Qasoskorlar: Cheksizlik jangi",
+    "orig": "Avengers: Infinity War",
+    "category": "tarjima",
+    "studio": "Marvel Studios",
+    "genres": [
+      "Jangari",
+      "Fantastika",
+      "Sarguzasht"
+    ],
+    "year": 2018,
+    "country": "AQSH",
+    "imdb": 8.4,
+    "views": 594100,
+    "quality": "4K Ultra HD",
+    "premiere": false,
+    "poster": "https://m.media-amazon.com/images/M/MV5BMjMxNjY2MDU1OV5BMl5BanBnXkFtZTgwNzY1MTUwNTM@._V1_FMjpg_UX800_.jpg",
+    "backdrop": "https://i.ytimg.com/vi/6ZfuNTqbHE8/maxresdefault.jpg",
+    "video": "https://www.youtube.com/watch?v=6ZfuNTqbHE8",
+    "desc": "Qasoskorlar va Galaktika qo'riqchilari qudratli titan Tanos barcha oltita Cheksizlik toshini qo'lga kiritib, butun borliqni mahv etishidan oldin uni to'xtatish uchun barcha kuchlarini birlashtiradilar.",
+    "episodes": []
+  },
+  {
+    "id": "3",
     "title": "O'rgimchak odam: Uyga yo'l yo'q",
     "orig": "Spider-Man: No Way Home",
     "category": "tarjima",
@@ -661,17 +693,154 @@
     "year": 2021,
     "country": "AQSH",
     "imdb": 8.2,
-    "views": 395120,
+    "views": 542800,
     "quality": "4K Ultra HD",
-    "premiere": true,
-    "poster": "https://image.tmdb.org/t/p/w600_and_h900_bestv2/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg",
-    "backdrop": "https://image.tmdb.org/t/p/original/14QbnygCuTO0vl7CAFmPf1fgZfV.jpg",
-    "video": "https://media.w3.org/2010/05/sintel/trailer.mp4",
-    "desc": "Piter Parkerning haqiqiy shaxsi fosh bo'lgach, uning hayoti ostin-ustun bo'ladi. U Doktor Strenjdan yordam so'raydi, biroq xavfli afsun buzilib, multikoinotdagi barcha o'tmishdagi yovuzlar bir olamga kirib keladi.",
+    "premiere": false,
+    "poster": "https://m.media-amazon.com/images/M/MV5BMmFiZGZjMmEtMTA0Ni00MzA2LTljMTYtZGI2MGJmZWYzZTQ2XkEyXkFqcGc@._V1_FMjpg_UX800_.jpg",
+    "backdrop": "https://i.ytimg.com/vi/JfVOs4VSpmA/maxresdefault.jpg",
+    "video": "https://www.youtube.com/watch?v=JfVOs4VSpmA",
+    "desc": "Piter Parkerning O'rgimchak odam ekanligi butun dunyoga fosh bo'lgach, u Doktor Strenjdan yordam so'raydi. Biroq jodu izdan chiqib, multikoinot darvozalari ochiladi va boshqa olamlardagi eng xavfli yovuzlar kirib keladi.",
     "episodes": []
   },
   {
-    "id": "3",
+    "id": "4",
+    "title": "Temir Odam",
+    "orig": "Iron Man",
+    "category": "tarjima",
+    "studio": "Marvel Studios",
+    "genres": [
+      "Jangari",
+      "Fantastika",
+      "Sarguzasht"
+    ],
+    "year": 2008,
+    "country": "AQSH",
+    "imdb": 7.9,
+    "views": 498000,
+    "quality": "1080p Full HD",
+    "premiere": false,
+    "poster": "https://m.media-amazon.com/images/M/MV5BMTczNTI2ODUwOF5BMl5BanBnXkFtZTcwMTU0NTIzMw@@._V1_FMjpg_UX800_.jpg",
+    "backdrop": "https://i.ytimg.com/vi/8ugaeA-nMTc/maxresdefault.jpg",
+    "video": "https://www.youtube.com/watch?v=8ugaeA-nMTc",
+    "desc": "Daho ixtirochi va milliarder Toni Stark terrorchilar asirligidan qutulish uchun yuqori texnologiyali zirhli kostyum yaratadi. Vataniga qaytgach, u dunyoni yovuz kuchlardan asrovchi Temir Odamga aylanadi.",
+    "episodes": []
+  },
+  {
+    "id": "5",
+    "title": "Qora Pantera",
+    "orig": "Black Panther",
+    "category": "tarjima",
+    "studio": "Marvel Studios",
+    "genres": [
+      "Jangari",
+      "Sarguzasht",
+      "Fantastika"
+    ],
+    "year": 2018,
+    "country": "AQSH",
+    "imdb": 7.3,
+    "views": 368400,
+    "quality": "4K Ultra HD",
+    "premiere": false,
+    "poster": "https://m.media-amazon.com/images/M/MV5BMTg1MTY2MjYzNV5BMl5BanBnXkFtZTgwMTc4NTMwNDI@._V1_FMjpg_UX800_.jpg",
+    "backdrop": "https://i.ytimg.com/vi/xjDjIWPwcPU/maxresdefault.jpg",
+    "video": "https://www.youtube.com/watch?v=xjDjIWPwcPU",
+    "desc": "Otasining vafotidan so'ng shahzoda T'Challa texnologik jihatdan yuksak rivojlangan yashirin Afrika davlati — Vakanda taxtini egallash uchun qaytadi. Ammo qadimiy dushman paydo bo'lgach, Vakanda va butun dunyo xavf ostida qoladi.",
+    "episodes": []
+  },
+  {
+    "id": "6",
+    "title": "Doktor Strenj: Telbalik multikoinotida",
+    "orig": "Doctor Strange in the Multiverse of Madness",
+    "category": "tarjima",
+    "studio": "Marvel Studios",
+    "genres": [
+      "Fantastika",
+      "Fentezi",
+      "Jangari"
+    ],
+    "year": 2022,
+    "country": "AQSH",
+    "imdb": 6.9,
+    "views": 342000,
+    "quality": "4K Ultra HD",
+    "premiere": false,
+    "poster": "https://m.media-amazon.com/images/M/MV5BN2YxZGRjMzYtZjE1ZC00MDI0LThjZmQtZTZmMzVmMmQ2NzBmXkEyXkFqcGc@._V1_FMjpg_UX800_.jpg",
+    "backdrop": "https://i.ytimg.com/vi/aWzlQ2N6qqg/maxresdefault.jpg",
+    "video": "https://www.youtube.com/watch?v=aWzlQ2N6qqg",
+    "desc": "Doktor Stiven Strenj taqiqlangan afsun yordamida multikoinotning sirli va xavfli muqobil olamlariga yo'l ochadi. Yangi tahdidni to'xtatish uchun u ittifoqchilari bilan noma'lum realliklararo sayohatga otlanadi.",
+    "episodes": []
+  },
+  {
+    "id": "7",
+    "title": "Galaktika qo'riqchilari 3",
+    "orig": "Guardians of the Galaxy Vol. 3",
+    "category": "tarjima",
+    "studio": "Marvel Studios",
+    "genres": [
+      "Fantastika",
+      "Sarguzasht",
+      "Komediya",
+      "Jangari"
+    ],
+    "year": 2023,
+    "country": "AQSH",
+    "imdb": 7.9,
+    "views": 418900,
+    "quality": "4K Ultra HD",
+    "premiere": true,
+    "poster": "https://m.media-amazon.com/images/M/MV5BOTJhOTMxMmItZmE0Ny00MDc3LWEzOGEtOGFkMzY4MWYyZDQ0XkEyXkFqcGc@._V1_FMjpg_UX800_.jpg",
+    "backdrop": "https://i.ytimg.com/vi/u3V5KDHRQvk/maxresdefault.jpg",
+    "video": "https://www.youtube.com/watch?v=u3V5KDHRQvk",
+    "desc": "Piter Kvill va uning sodiq jamoasi do'stlari Raketaning hayotini saqlab qolish uchun xavfli missiyaga otlanishadi. Muvaffaqiyatsizlik Galaktika qo'riqchilarining yakuniga sabab bo'lishi mumkin.",
+    "episodes": []
+  },
+  {
+    "id": "8",
+    "title": "Loki",
+    "orig": "Loki",
+    "category": "serial",
+    "studio": "Marvel Studios",
+    "genres": [
+      "Fantastika",
+      "Sarguzasht",
+      "Fentezi"
+    ],
+    "year": 2023,
+    "country": "AQSH",
+    "imdb": 8.2,
+    "views": 376500,
+    "quality": "4K Ultra HD",
+    "premiere": true,
+    "poster": "https://m.media-amazon.com/images/M/MV5BYzA2YjM2ZWQtYTZhMS00OTI3LTlhYzQtZjBiZWZkMDdlNjA5XkEyXkFqcGc@._V1_FMjpg_UX800_.jpg",
+    "backdrop": "https://i.ytimg.com/vi/nW948Va-l10/maxresdefault.jpg",
+    "video": "https://www.youtube.com/watch?v=nW948Va-l10",
+    "desc": "Tesseraktni o'g'irlab qochgan makkorlik xudosi Loki 'Vaqt o'zgarishlarini nazorat qilish boshqarmasi' (TVA) qo'liga tushadi. Endi u muqaddas vaqt chizig'ini halokatdan qutqarishga majbur.",
+    "episodes": [
+      {
+        "num": 1,
+        "title": "1-fasl 1-qism: Ulug'vor maqsad",
+        "url": "https://www.youtube.com/watch?v=nW948Va-l10"
+      },
+      {
+        "num": 2,
+        "title": "1-fasl 2-qism: Variant",
+        "url": "https://www.youtube.com/watch?v=nW948Va-l10"
+      },
+      {
+        "num": 3,
+        "title": "1-fasl 3-qism: Lamentis-1",
+        "url": "https://www.youtube.com/watch?v=dug56u8NN7g"
+      },
+      {
+        "num": 4,
+        "title": "1-fasl 4-qism: Vaqt qo'riqchilari",
+        "url": "https://www.youtube.com/watch?v=G4JuopziR3Q"
+      }
+    ]
+  },
+  {
+    "id": "9",
     "title": "Qora Ritsar",
     "orig": "The Dark Knight",
     "category": "tarjima",
@@ -685,17 +854,17 @@
     "year": 2008,
     "country": "AQSH",
     "imdb": 9,
-    "views": 612400,
+    "views": 715200,
     "quality": "4K Ultra HD",
     "premiere": false,
-    "poster": "https://image.tmdb.org/t/p/w600_and_h900_bestv2/qJ2tW6WMUDux911r6m7haRef0WH.jpg",
-    "backdrop": "https://image.tmdb.org/t/p/original/dqK9Hag1054tghRQSqLSfrkvQnA.jpg",
-    "video": "https://vjs.zencdn.net/v/oceans.mp4",
-    "desc": "Gotem shahrida betartiblik hukm suradi. Betmen leytenant Jim Gordon va prokuror Xarvi Dent bilan shaharni jinoyatchilikdan tozalashga harakat qiladi, biroq ularning qarshisida aqlbovar qilmas tartibsizlik ustasi — Joker paydo bo'ladi.",
+    "poster": "https://m.media-amazon.com/images/M/MV5BMTMxNTMwODM0NF5BMl5BanBnXkFtZTcwODAyMTk2Mw@@._V1_FMjpg_UX800_.jpg",
+    "backdrop": "https://i.ytimg.com/vi/EXeTwQWrcwY/maxresdefault.jpg",
+    "video": "https://www.youtube.com/watch?v=EXeTwQWrcwY",
+    "desc": "Betmen leytenant Jim Gordon va prokuror Xarvi Dent bilan birgalikda Gotem ko'chalarini jinoyat olamidan tozalashga kirishadi. Ammo ularning yo'lida shaharni xaosga cho'mdiruvchi dahshatli daho — Joker paydo bo'ladi.",
     "episodes": []
   },
   {
-    "id": "4",
+    "id": "10",
     "title": "Betmen",
     "orig": "The Batman",
     "category": "tarjima",
@@ -709,17 +878,109 @@
     "year": 2022,
     "country": "AQSH",
     "imdb": 7.8,
-    "views": 284000,
-    "quality": "1080p Full HD",
+    "views": 429000,
+    "quality": "4K Ultra HD",
     "premiere": false,
-    "poster": "https://image.tmdb.org/t/p/w600_and_h900_bestv2/74xTEgt7R36Fpooo50r9T25onhq.jpg",
-    "backdrop": "https://image.tmdb.org/t/p/original/b0PlSFdDwbyK0cf5RxwDpaOJQvQ.jpg",
-    "video": "https://media.w3.org/2010/05/sintel/trailer.mp4",
-    "desc": "Gotem shahri elitasini ketma-ket shafqatsizlarcha qatl qilayotgan sirli jumboqboz (Riddler) ortidan quvgan Bryus Ueyn jinoyat olamining eng qorong'i qatlamlariga kirib boradi va o'z oilasining qora o'tmishini bilib oladi.",
+    "poster": "https://m.media-amazon.com/images/M/MV5BMmU5NGJlMzAtMGNmOC00YjJjLTgyMzUtNjAyYmE4Njg5YWMyXkEyXkFqcGc@._V1_FMjpg_UX800_.jpg",
+    "backdrop": "https://i.ytimg.com/vi/mqqft2x_Aa4/maxresdefault.jpg",
+    "video": "https://www.youtube.com/watch?v=mqqft2x_Aa4",
+    "desc": "Ikki yildan beri Gotem jinoyatchilariga dahshat solib kelayotgan Bryus Ueyn shahar amaldorlarini nishonga olgan sirli qotil — Jumboqchi (Riddler) iziga tushadi va Ueynlar oilasiga aloqador qora sirlarni fosh etadi.",
     "episodes": []
   },
   {
-    "id": "5",
+    "id": "11",
+    "title": "Joker",
+    "orig": "Joker",
+    "category": "tarjima",
+    "studio": "DC Studios",
+    "genres": [
+      "Drama",
+      "Kriminal",
+      "Triller"
+    ],
+    "year": 2019,
+    "country": "AQSH",
+    "imdb": 8.4,
+    "views": 538400,
+    "quality": "4K Ultra HD",
+    "premiere": false,
+    "poster": "https://m.media-amazon.com/images/M/MV5BNzY3OWQ5NDktNWQ2OC00ZjdlLThkMmItMDhhNDk3NTFiZGU4XkEyXkFqcGc@._V1_FMjpg_UX800_.jpg",
+    "backdrop": "https://i.ytimg.com/vi/zAGVQLHvwOY/maxresdefault.jpg",
+    "video": "https://www.youtube.com/watch?v=zAGVQLHvwOY",
+    "desc": "Gotem shahrida jamiyat tomonidan rad etilgan va kamsitilgan komik Artur Flek asta-sekin aqldan ozib, shafqatsiz jinoyat olamining ramzi — Jokerga aylanadi.",
+    "episodes": []
+  },
+  {
+    "id": "12",
+    "title": "Adolat Ligasi",
+    "orig": "Justice League",
+    "category": "tarjima",
+    "studio": "DC Studios",
+    "genres": [
+      "Jangari",
+      "Fantastika",
+      "Sarguzasht"
+    ],
+    "year": 2021,
+    "country": "AQSH",
+    "imdb": 7.9,
+    "views": 389100,
+    "quality": "1080p Full HD",
+    "premiere": false,
+    "poster": "https://m.media-amazon.com/images/M/MV5BMjM5YmQxM2YtZjI2Yy00YjhhLTg5N2MtMTEyMzdlZDU3OTVhXkEyXkFqcGc@._V1_FMjpg_UX800_.jpg",
+    "backdrop": "https://i.ytimg.com/vi/3cxixDgHUYw/sddefault.jpg",
+    "video": "https://www.youtube.com/watch?v=3cxixDgHUYw",
+    "desc": "Supermenning fidokorligidan ilhomlangan Bryus Ueyn yangi ittifoqchisi Diana Prins bilan birgalikda Yerga yaqinlashib kelayotgan halokatli kosmik tahdidga qarshi meta-insonlar jamoasini to'playdi.",
+    "episodes": []
+  },
+  {
+    "id": "13",
+    "title": "Akvamen",
+    "orig": "Aquaman",
+    "category": "tarjima",
+    "studio": "DC Studios",
+    "genres": [
+      "Jangari",
+      "Sarguzasht",
+      "Fentezi"
+    ],
+    "year": 2018,
+    "country": "AQSH",
+    "imdb": 6.8,
+    "views": 356000,
+    "quality": "4K Ultra HD",
+    "premiere": false,
+    "poster": "https://m.media-amazon.com/images/M/MV5BOTk5ODg0OTU5M15BMl5BanBnXkFtZTgwMDQ3MDY3NjM@._V1_FMjpg_UX800_.jpg",
+    "backdrop": "https://i.ytimg.com/vi/WDkg3h8PCVU/maxresdefault.jpg",
+    "video": "https://www.youtube.com/watch?v=WDkg3h8PCVU",
+    "desc": "Suv osti qirolligi Atlantidaning qonuniy merosxo'ri Artur Karri o'gay ukasi quruqlik olamiga qarshi katta urush boshlamasligi uchun o'z xalqiga yetakchilik qilishi va afsonaviy uch ayri nayzani topishi shart.",
+    "episodes": []
+  },
+  {
+    "id": "14",
+    "title": "Po'lat Odam (Supermen)",
+    "orig": "Man of Steel",
+    "category": "tarjima",
+    "studio": "DC Studios",
+    "genres": [
+      "Jangari",
+      "Fantastika",
+      "Sarguzasht"
+    ],
+    "year": 2013,
+    "country": "AQSH",
+    "imdb": 7.1,
+    "views": 334700,
+    "quality": "1080p Full HD",
+    "premiere": false,
+    "poster": "https://m.media-amazon.com/images/M/MV5BMTk5ODk1NDkxMF5BMl5BanBnXkFtZTcwNTA5OTY0OQ@@._V1_FMjpg_UX800_.jpg",
+    "backdrop": "https://i.ytimg.com/vi/T6DJcgm3wNY/maxresdefault.jpg",
+    "video": "https://www.youtube.com/watch?v=T6DJcgm3wNY",
+    "desc": "Halokatga uchragan Kripton sayyorasidan Yerga yuborilgan Klark Kent o'zidagi g'ayritabiiy kuch sababini anglaydi. General Zod Yerga hujum qilganda, u insoniyat umidi — Supermenga aylanishi lozim.",
+    "episodes": []
+  },
+  {
+    "id": "15",
     "title": "Avatar: Suv yo'li",
     "orig": "Avatar: The Way of Water",
     "category": "tarjima",
@@ -731,18 +992,42 @@
     ],
     "year": 2022,
     "country": "AQSH",
-    "imdb": 7.6,
-    "views": 520800,
+    "imdb": 7.5,
+    "views": 618000,
     "quality": "4K Ultra HD",
     "premiere": true,
-    "poster": "https://image.tmdb.org/t/p/w600_and_h900_bestv2/t6HIqrRAclMCA60NsSmeqe9RmNV.jpg",
-    "backdrop": "https://image.tmdb.org/t/p/original/s16H6tpK2utvwDtzZ8Qy4qm5Emw.jpg",
-    "video": "https://vjs.zencdn.net/v/oceans.mp4",
-    "desc": "Jeyk Salli va Neytiri o'z oilalarini yangi xavfdan himoya qilish uchun Pandora sayyorasining sirli dengiz qabilalariga qochadilar. Insonlar qaytib kelgach, aqlbovar qilmas suv olamida dahshatli kurash boshlanadi.",
+    "poster": "https://m.media-amazon.com/images/M/MV5BNWI0Y2NkOWEtMmM2OC00MjQ3LWI1YzItZGQxYzQ3NzI4NWZmXkEyXkFqcGc@._V1_FMjpg_UX800_.jpg",
+    "backdrop": "https://i.ytimg.com/vi/d9MyW72ELq0/maxresdefault.jpg",
+    "video": "https://www.youtube.com/watch?v=d9MyW72ELq0",
+    "desc": "Jeyk Salli va Neytiri o'z farzandlarini eski dushman tahdididan asrash uchun o'rmonni tark etib, Pandora okeanlarida yashovchi Metkayina qabilasidan panoh so'raydilar.",
     "episodes": []
   },
   {
-    "id": "6",
+    "id": "16",
+    "title": "Avatar",
+    "orig": "Avatar",
+    "category": "tarjima",
+    "studio": "20th Century Fox",
+    "genres": [
+      "Fantastika",
+      "Sarguzasht",
+      "Jangari",
+      "Fentezi"
+    ],
+    "year": 2009,
+    "country": "AQSH",
+    "imdb": 7.9,
+    "views": 645000,
+    "quality": "4K Ultra HD",
+    "premiere": false,
+    "poster": "https://m.media-amazon.com/images/M/MV5BMDEzMmQwZjctZWU2My00MWNlLWE0NjItMDJlYTRlNGJiZjcyXkEyXkFqcGc@._V1_FMjpg_UX800_.jpg",
+    "backdrop": "https://i.ytimg.com/vi/5PSNL1qE6VY/maxresdefault.jpg",
+    "video": "https://www.youtube.com/watch?v=5PSNL1qE6VY",
+    "desc": "Sobiq dengiz piyodasi Jeyk Salli olis Pandora sayyorasiga maxsus 'Avatar' dasturi bo'yicha yuboriladi. Mahalliy Na'vi xalqi malikasi Neytiri bilan tanishgach, u Pandora tabiatini bosqinchilardan himoya qilishga otlanadi.",
+    "episodes": []
+  },
+  {
+    "id": "17",
     "title": "Dedpul va Rosomaxa",
     "orig": "Deadpool & Wolverine",
     "category": "tarjima",
@@ -754,18 +1039,64 @@
     ],
     "year": 2024,
     "country": "AQSH",
-    "imdb": 7.7,
-    "views": 431000,
+    "imdb": 7.6,
+    "views": 584200,
     "quality": "4K Ultra HD",
     "premiere": true,
-    "poster": "https://image.tmdb.org/t/p/w600_and_h900_bestv2/8cdWjvZQUExUUTzyp4t6EDMubfO.jpg",
-    "backdrop": "https://image.tmdb.org/t/p/original/yDHYTfA3R0jFYba16jBB1jv8v2C.jpg",
-    "video": "https://media.w3.org/2010/05/sintel/trailer.mp4",
-    "desc": "O'z olamini muqarrar halokatdan qutqarish uchun Dedpul boshqa koinotdagi tushkunlikka tushgan afsonaviy Rosomaxa bilan birlashishga majbur bo'ladi. Kulgi, shiddatli janglar va qora yumorga boy epik sarguzasht.",
+    "poster": "https://m.media-amazon.com/images/M/MV5BZTk5ODY0MmQtMzA3Ni00NGY1LThiYzItZThiNjFiNDM4MTM3XkEyXkFqcGc@._V1_FMjpg_UX800_.jpg",
+    "backdrop": "https://i.ytimg.com/vi/73_1biulkYk/maxresdefault.jpg",
+    "video": "https://www.youtube.com/watch?v=73_1biulkYk",
+    "desc": "Tinch hayot kechirayotgan Ueyd Uilson o'z koinoti yo'q bo'lib ketish arafasida ekanini bilgach, boshqa olamdagi qaysar Rosomaxa bilan birlashib, aqlbovar qilmas sarguzashtga sho'ng'iydi.",
     "episodes": []
   },
   {
-    "id": "7",
+    "id": "18",
+    "title": "Logan: Rosomaxa",
+    "orig": "Logan",
+    "category": "tarjima",
+    "studio": "20th Century Fox",
+    "genres": [
+      "Jangari",
+      "Drama",
+      "Fantastika"
+    ],
+    "year": 2017,
+    "country": "AQSH",
+    "imdb": 8.1,
+    "views": 392000,
+    "quality": "4K Ultra HD",
+    "premiere": false,
+    "poster": "https://m.media-amazon.com/images/M/MV5BM2JjODdkMGMtNmY2YS00OGM2LThiY2YtZGYyNzE4Nzc2ODA0XkEyXkFqcGc@._V1_FMjpg_UX800_.jpg",
+    "backdrop": "https://i.ytimg.com/vi/Div0iP65aZo/maxresdefault.jpg",
+    "video": "https://www.youtube.com/watch?v=Div0iP65aZo",
+    "desc": "Yaqin kelajakda kuchdan qolgan Logan bemor professor Charlz Ksavyega g'amxo'rlik qilib yashirinib yuradi. Ammo yovuz korporatsiya ta'qibidagi yosh mutant qizcha paydo bo'lgach, Rosomaxa yana tirnoqlarini chiqarishga majbur bo'ladi.",
+    "episodes": []
+  },
+  {
+    "id": "19",
+    "title": "Ford Ferrariga qarshi",
+    "orig": "Ford v Ferrari",
+    "category": "tarjima",
+    "studio": "20th Century Fox",
+    "genres": [
+      "Drama",
+      "Jangari",
+      "Tarixiy"
+    ],
+    "year": 2019,
+    "country": "AQSH",
+    "imdb": 8.1,
+    "views": 410500,
+    "quality": "4K Ultra HD",
+    "premiere": false,
+    "poster": "https://m.media-amazon.com/images/M/MV5BOTBjNTEyNjYtYjdkNi00YzE5LTljYzUtZjVlYmYwZmJmZWYxXkEyXkFqcGc@._V1_FMjpg_UX800_.jpg",
+    "backdrop": "https://i.ytimg.com/vi/zyYgDtY2AMY/maxresdefault.jpg",
+    "video": "https://www.youtube.com/watch?v=zyYgDtY2AMY",
+    "desc": "Amerikalik avtomobil konstruktori Kerroll Shelbi va jasur britaniyalik poygachi Ken Maylz 1966-yilgi afsonaviy 'Le-Man 24 soat' poygasida yengilmas Ferrarini mag'lub etish uchun inqilobiy poyga mashinasini yaratadilar.",
+    "episodes": []
+  },
+  {
+    "id": "20",
     "title": "Interstellar: Yulduzlararo",
     "orig": "Interstellar",
     "category": "tarjima",
@@ -778,17 +1109,40 @@
     "year": 2014,
     "country": "AQSH",
     "imdb": 8.7,
-    "views": 580000,
+    "views": 742000,
     "quality": "4K Ultra HD",
     "premiere": false,
-    "poster": "https://image.tmdb.org/t/p/w600_and_h900_bestv2/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg",
-    "backdrop": "https://image.tmdb.org/t/p/original/rAiYTsqJiik70dwPlAvj9a92neL.jpg",
-    "video": "https://vjs.zencdn.net/v/oceans.mp4",
-    "desc": "Yer yuzi qurg'oqchilik va chang bo'ronlari girdobida qolib insoniyat nobud bo'layotganda, bir guruh jasur tadqiqotchilar insoniyatning yangi uyini izlash uchun vaqt va fazo qonunlarini chetlab o'tib, qora tuynuk tomon yo'l oladilar.",
+    "poster": "https://m.media-amazon.com/images/M/MV5BYzdjMDAxZGItMjI2My00ODA1LTlkNzItOWFjMDU5ZDJlYWY3XkEyXkFqcGc@._V1_FMjpg_UX800_.jpg",
+    "backdrop": "https://i.ytimg.com/vi/zSWdZVtXT7E/maxresdefault.jpg",
+    "video": "https://www.youtube.com/watch?v=zSWdZVtXT7E",
+    "desc": "Yer sayyorasi ekologik halokat yoqasiga kelib qolganda, sobiq uchuvchi Kuper va olimlar guruhi insoniyat uchun yashashga yaroqli yangi sayyora topish maqsadida fazoviy tuynuk orqali o'zga galaktikaga parvoz qiladilar.",
     "episodes": []
   },
   {
-    "id": "8",
+    "id": "21",
+    "title": "Muqaddima (Ibtido)",
+    "orig": "Inception",
+    "category": "tarjima",
+    "studio": "Warner Bros.",
+    "genres": [
+      "Fantastika",
+      "Jangari",
+      "Triller"
+    ],
+    "year": 2010,
+    "country": "AQSH",
+    "imdb": 8.8,
+    "views": 682000,
+    "quality": "4K Ultra HD",
+    "premiere": false,
+    "poster": "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_FMjpg_UX800_.jpg",
+    "backdrop": "https://i.ytimg.com/vi/YoHD9XEInc0/maxresdefault.jpg",
+    "video": "https://www.youtube.com/watch?v=YoHD9XEInc0",
+    "desc": "Dom Kobb — insonlarning ongi ostiga tush vaqtida kirib, eng maxfiy sirlarni o'g'irlash bo'yicha tengsiz mutaxassis. Endi unga aksincha — o'zga inson ongiga g'oya joylashtirishdek imkonsiz topshiriq beriladi.",
+    "episodes": []
+  },
+  {
+    "id": "22",
     "title": "Dyuna: Ikkinchi qism",
     "orig": "Dune: Part Two",
     "category": "tarjima",
@@ -796,22 +1150,136 @@
     "genres": [
       "Fantastika",
       "Jangari",
-      "Drama"
+      "Drama",
+      "Sarguzasht"
     ],
     "year": 2024,
     "country": "AQSH",
     "imdb": 8.5,
-    "views": 367200,
+    "views": 495000,
     "quality": "4K Ultra HD",
     "premiere": true,
-    "poster": "https://image.tmdb.org/t/p/w600_and_h900_bestv2/1pdfLvkbY9ohJlCjQH2CZjjYVvJ.jpg",
-    "backdrop": "https://image.tmdb.org/t/p/original/xOMo8BRK7PfcJv9JCnx7s520DRq.jpg",
-    "video": "https://media.w3.org/2010/05/sintel/trailer.mp4",
-    "desc": "Pol Atreydes Chani va qudratli fremenlar bilan birlashib, uning butun oilasini qirib tashlagan xoinlardan qasos olish yo'liga chiqadi. Butun koinot taqdirini hal qiluvchi buyuk muqaddas urush.",
+    "poster": "https://m.media-amazon.com/images/M/MV5BNTc0YmQxMjEtODI5MC00NjFiLTlkMWUtOGQ5NjFmYWUyZGJhXkEyXkFqcGc@._V1_FMjpg_UX800_.jpg",
+    "backdrop": "https://i.ytimg.com/vi/Way9Dexny3w/maxresdefault.jpg",
+    "video": "https://www.youtube.com/watch?v=Way9Dexny3w",
+    "desc": "Pol Atreydes sahro jangchilari — fremenlar va Chani bilan birlashib, uning oilasini yo'q qilgan fitnachilarga qarshi intiqom urushini boshlaydi hamda butun koinot kelajagini belgilovchi tanlov oldida turadi.",
     "episodes": []
   },
   {
-    "id": "9",
+    "id": "23",
+    "title": "Matritsa",
+    "orig": "The Matrix",
+    "category": "tarjima",
+    "studio": "Warner Bros.",
+    "genres": [
+      "Fantastika",
+      "Jangari"
+    ],
+    "year": 1999,
+    "country": "AQSH",
+    "imdb": 8.7,
+    "views": 560000,
+    "quality": "4K Ultra HD",
+    "premiere": false,
+    "poster": "https://m.media-amazon.com/images/M/MV5BN2NmN2VhMTQtMDNiOS00NDlhLTliMjgtODE2ZTY0ODQyNDRhXkEyXkFqcGc@._V1_FMjpg_UX800_.jpg",
+    "backdrop": "https://i.ytimg.com/vi/vKQi3bBA1y8/maxresdefault.jpg",
+    "video": "https://www.youtube.com/watch?v=vKQi3bBA1y8",
+    "desc": "Xaker Tomas Anderson (Neo) o'zi yashayotgan dunyo aslida aqlli mashinalar tomonidan yaratilgan simulyatsiya — Matritsa ekanligini bilib qoladi va insoniyat ozodligi uchun kurashga qo'shiladi.",
+    "episodes": []
+  },
+  {
+    "id": "24",
+    "title": "Garri Potter va Ajal tuhfalari: 2-qism",
+    "orig": "Harry Potter and the Deathly Hallows: Part 2",
+    "category": "tarjima",
+    "studio": "Warner Bros.",
+    "genres": [
+      "Fentezi",
+      "Sarguzasht",
+      "Oilaviy"
+    ],
+    "year": 2011,
+    "country": "Buyuk Britaniya",
+    "imdb": 8.1,
+    "views": 620400,
+    "quality": "4K Ultra HD",
+    "premiere": false,
+    "poster": "https://m.media-amazon.com/images/M/MV5BOTA1Mzc2N2ItZWRiNS00MjQzLTlmZDQtMjU0NmY1YWRkMGQ4XkEyXkFqcGc@._V1_FMjpg_UX800_.jpg",
+    "backdrop": "https://i.ytimg.com/vi/5NYt1qirBWg/maxresdefault.jpg",
+    "video": "https://www.youtube.com/watch?v=5NYt1qirBWg",
+    "desc": "Sehrgarlar olamidagi ezgulik va yovuzlik kuchlari o'rtasidagi hal qiluvchi urush boshlanadi. Xogvarts qal'asi devorlari ostida Garri Potter va Lord Voldemort o'rtasida so'nggi jang bo'lib o'tadi.",
+    "episodes": []
+  },
+  {
+    "id": "25",
+    "title": "Godzilla va Kong: Yangi imperiya",
+    "orig": "Godzilla x Kong: The New Empire",
+    "category": "tarjima",
+    "studio": "Warner Bros.",
+    "genres": [
+      "Jangari",
+      "Fantastika",
+      "Sarguzasht"
+    ],
+    "year": 2024,
+    "country": "AQSH",
+    "imdb": 6.1,
+    "views": 388200,
+    "quality": "4K Ultra HD",
+    "premiere": true,
+    "poster": "https://m.media-amazon.com/images/M/MV5BMTY0N2MzODctY2ExYy00OWYxLTkyNDItMTVhZGIxZjliZjU5XkEyXkFqcGc@._V1_FMjpg_UX800_.jpg",
+    "backdrop": "https://i.ytimg.com/vi/lV1OOlGwExM/maxresdefault.jpg",
+    "video": "https://www.youtube.com/watch?v=lV1OOlGwExM",
+    "desc": "Qudratli Kong va dahshatli Godzilla Yer tubida yashiringan hamda titanlar va insoniyat hayotiga xavf solayotgan ulkan qadimiy yovuz kuchga qarshi elkama-elka kurashishga majbur bo'ladilar.",
+    "episodes": []
+  },
+  {
+    "id": "26",
+    "title": "Ajdaho uyi",
+    "orig": "House of the Dragon",
+    "category": "serial",
+    "studio": "Warner Bros.",
+    "genres": [
+      "Fentezi",
+      "Drama",
+      "Jangari",
+      "Sarguzasht"
+    ],
+    "year": 2024,
+    "country": "AQSH",
+    "imdb": 8.4,
+    "views": 465000,
+    "quality": "4K Ultra HD",
+    "premiere": true,
+    "poster": "https://m.media-amazon.com/images/M/MV5BOWU2ZDA0M2EtNWEyYy00MWUwLWI4NjAtYzkxMDFjYzZkNGFiXkEyXkFqcGc@._V1_FMjpg_UX800_.jpg",
+    "backdrop": "https://i.ytimg.com/vi/DotnJ7tTA34/maxresdefault.jpg",
+    "video": "https://www.youtube.com/watch?v=DotnJ7tTA34",
+    "desc": "'Taxtlar o'yini' voqealaridan 200 yil avval Targaryenlar sulolasi o'rtasida Temir taxt uchun boshlangan shafqatsiz fuqarolar urushi — 'Ajdaholar raqsi' haqidagi epik serial.",
+    "episodes": [
+      {
+        "num": 1,
+        "title": "1-fasl 1-qism: Ajdaho merosxo'rlari",
+        "url": "https://www.youtube.com/watch?v=DotnJ7tTA34"
+      },
+      {
+        "num": 2,
+        "title": "1-fasl 2-qism: Shahzoda Deymon",
+        "url": "https://www.youtube.com/watch?v=YN2H_sKcmGw"
+      },
+      {
+        "num": 1,
+        "title": "2-fasl 1-qism: O'g'il uchun o'g'il",
+        "url": "https://www.youtube.com/watch?v=DotnJ7tTA34"
+      },
+      {
+        "num": 2,
+        "title": "2-fasl 2-qism: Olovi va qoni",
+        "url": "https://www.youtube.com/watch?v=YN2H_sKcmGw"
+      }
+    ]
+  },
+  {
+    "id": "27",
     "title": "Oppengeymer",
     "orig": "Oppenheimer",
     "category": "tarjima",
@@ -819,22 +1287,22 @@
     "genres": [
       "Tarixiy",
       "Drama",
-      "Hujjatli"
+      "Triller"
     ],
     "year": 2023,
     "country": "AQSH",
-    "imdb": 8.9,
-    "views": 412000,
+    "imdb": 8.3,
+    "views": 512000,
     "quality": "4K Ultra HD",
     "premiere": false,
-    "poster": "https://image.tmdb.org/t/p/w600_and_h900_bestv2/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg",
-    "backdrop": "https://image.tmdb.org/t/p/original/rLb2cwF3Pazuxaj0sRXQ037tGI1.jpg",
-    "video": "https://vjs.zencdn.net/v/oceans.mp4",
-    "desc": "Atom bombasining otasi hisoblangan daho fizik Robert Oppengeymerning hayoti, maxfiy 'Manxetten' loyihasi va dunyoni abadiy o'zgartirgan qurol portlatilgandan so'ng uning ichki ruhiy kurashlari haqida epik asar.",
+    "poster": "https://m.media-amazon.com/images/M/MV5BN2JkMDc5MGQtZjg3YS00NmFiLWIyZmQtZTJmNTM5MjVmYTQ4XkEyXkFqcGc@._V1_FMjpg_UX800_.jpg",
+    "backdrop": "https://i.ytimg.com/vi/uYPbbksJxIg/maxresdefault.jpg",
+    "video": "https://www.youtube.com/watch?v=uYPbbksJxIg",
+    "desc": "Ikkinchi jahon urushi yillarida maxfiy 'Manxetten' loyihasiga rahbarlik qilgan fizik Robert Oppengeymer va insoniyat tarixini o'zgartirgan ilk atom qurolining yaratilishi haqida Oskarga sazovor bo'lgan shedevr.",
     "episodes": []
   },
   {
-    "id": "10",
+    "id": "28",
     "title": "Forsaj 10",
     "orig": "Fast X",
     "category": "tarjima",
@@ -846,80 +1314,218 @@
     ],
     "year": 2023,
     "country": "AQSH",
-    "imdb": 6,
-    "views": 310500,
+    "imdb": 5.7,
+    "views": 448500,
     "quality": "1080p Full HD",
     "premiere": false,
-    "poster": "https://image.tmdb.org/t/p/w600_and_h900_bestv2/fiVW06jE7z9YnO4trhaMEdclSiC.jpg",
-    "backdrop": "https://image.tmdb.org/t/p/original/4XM8DUTQb3lhLemJC51Jx4a2EuA.jpg",
-    "video": "https://media.w3.org/2010/05/sintel/trailer.mp4",
-    "desc": "Dom Toretto va uning oilasi bu safar ularning o'tmishdagi qilmishlaridan o'ch olmoqchi bo'lgan eng shafqatsiz dushman — Dante Reyes bilan to'qnashadilar. Rim ko'chalaridan butun dunyoga tarqalgan shiddatli poygalar.",
+    "poster": "https://m.media-amazon.com/images/M/MV5BYzEwZjczOTktYzU1OS00YjJlLTgyY2UtNWEzODBlN2RjZDEwXkEyXkFqcGc@._V1_FMjpg_UX800_.jpg",
+    "backdrop": "https://i.ytimg.com/vi/32RAq6JzY-w/maxresdefault.jpg",
+    "video": "https://www.youtube.com/watch?v=32RAq6JzY-w",
+    "desc": "Dominik Toretto va uning oilasi o'tmish soyasidan chiqqan eng xavfli va qasoskor dushman — narkobaron o'g'li Dante Reyesga qarshi Rimdan Rio-de-Janeyrogacha shiddatli kurash olib boradi.",
     "episodes": []
   },
   {
-    "id": "11",
-    "title": "Temir Odam",
-    "orig": "Iron Man",
+    "id": "29",
+    "title": "Yura davri olami: Hukmronlik",
+    "orig": "Jurassic World Dominion",
     "category": "tarjima",
-    "studio": "Marvel Studios",
-    "genres": [
-      "Jangari",
-      "Fantastika",
-      "Sarguzasht"
-    ],
-    "year": 2008,
-    "country": "AQSH",
-    "imdb": 7.9,
-    "views": 450000,
-    "quality": "1080p Full HD",
-    "premiere": false,
-    "poster": "https://image.tmdb.org/t/p/w600_and_h900_bestv2/78lPtwv72eTNqFW9COBYI0dWDJa.jpg",
-    "backdrop": "https://image.tmdb.org/t/p/original/cyecB7godJ6kNHGON0Fbr9AcMiP.jpg",
-    "video": "https://vjs.zencdn.net/v/oceans.mp4",
-    "desc": "Milliarder va qurolsoz Toni Stark terrorchilar asiriga tushadi. U omon qolish uchun yuqori texnologiyali po'lat zirh yasaydi va butun dunyoni himoya qiluvchi Temir Odamga aylanadi.",
-    "episodes": []
-  },
-  {
-    "id": "12",
-    "title": "Loki (Serial)",
-    "orig": "Loki",
-    "category": "serial",
-    "studio": "Marvel Studios",
+    "studio": "Universal Pictures",
     "genres": [
       "Fantastika",
       "Sarguzasht",
       "Jangari"
     ],
-    "year": 2023,
+    "year": 2022,
+    "country": "AQSH",
+    "imdb": 5.6,
+    "views": 361000,
+    "quality": "4K Ultra HD",
+    "premiere": false,
+    "poster": "https://m.media-amazon.com/images/M/MV5BZGExMWU2NWMtNzczYi00NjQ4LTk2YzctZGZkYmRmMDdhMjllXkEyXkFqcGc@._V1_FMjpg_UX800_.jpg",
+    "backdrop": "https://i.ytimg.com/vi/fb5ELWi-ekk/maxresdefault.jpg",
+    "video": "https://www.youtube.com/watch?v=fb5ELWi-ekk",
+    "desc": "Nublar oroli vayron bo'lganidan to'rt yil o'tib, dinozavrlar butun Yer yuzi bo'ylab insonlar bilan yonma-yon yashamoqda va ov qilmoqda. Tabiatdagi nozik muvozanat kelajakda kim hukmron bo'lishini hal qiladi.",
+    "episodes": []
+  },
+  {
+    "id": "30",
+    "title": "Top Gan: Meverik",
+    "orig": "Top Gun: Maverick",
+    "category": "tarjima",
+    "studio": "Paramount Pictures",
+    "genres": [
+      "Jangari",
+      "Drama"
+    ],
+    "year": 2022,
     "country": "AQSH",
     "imdb": 8.2,
-    "views": 290000,
+    "views": 472300,
+    "quality": "4K Ultra HD",
+    "premiere": false,
+    "poster": "https://m.media-amazon.com/images/M/MV5BMDBkZDNjMWEtOTdmMi00NmExLTg5MmMtNTFlYTJlNWY5YTdmXkEyXkFqcGc@._V1_FMjpg_UX800_.jpg",
+    "backdrop": "https://i.ytimg.com/vi/giXco2jaZ_4/maxresdefault.jpg",
+    "video": "https://www.youtube.com/watch?v=giXco2jaZ_4",
+    "desc": "O'ttiz yildan ortiq xizmat qilgan afsonaviy qiruvchi uchuvchi Pit 'Meverik' Mitchell yosh bitiruvchilar guruhini hech kim tirik qaytmagan o'ta xavfli maxsus topshiriqqa tayyorlash uchun qaytadi.",
+    "episodes": []
+  },
+  {
+    "id": "31",
+    "title": "Uddalab bo'lmas topshiriq 7",
+    "orig": "Mission: Impossible – Dead Reckoning",
+    "category": "tarjima",
+    "studio": "Paramount Pictures",
+    "genres": [
+      "Jangari",
+      "Triller",
+      "Sarguzasht"
+    ],
+    "year": 2023,
+    "country": "AQSH",
+    "imdb": 7.7,
+    "views": 419600,
     "quality": "4K Ultra HD",
     "premiere": true,
-    "poster": "https://image.tmdb.org/t/p/w600_and_h900_bestv2/voHUmluYmKyleFk253VTMe0L9Ac.jpg",
-    "backdrop": "https://image.tmdb.org/t/p/original/q3rwsXxUPbOuo1qI9n216I2FjhW.jpg",
-    "video": "https://vjs.zencdn.net/v/oceans.mp4",
-    "desc": "Qasoskorlar voqealaridan so'ng Tesseraktni o'g'irlagan ayyorlik xudosi Loki 'Vaqtni o'zgartirish idorasi' (TVA) qo'liga tushadi va butun multikoinot xronologiyasini saqlab qolishga kirishadi.",
+    "poster": "https://m.media-amazon.com/images/M/MV5BN2U4OTdmM2QtZTkxYy00ZmQyLTg2N2UtMDdmMGJmNDhlZDU1XkEyXkFqcGc@._V1_FMjpg_UX800_.jpg",
+    "backdrop": "https://i.ytimg.com/vi/avz06PDqDbM/maxresdefault.jpg",
+    "video": "https://www.youtube.com/watch?v=avz06PDqDbM",
+    "desc": "Itan Xant va uning IMF jamoasi insoniyatga xavf soluvchi sun'iy intellekt qurolini yovuz kuchlar qo'liga tushmasidan avval topib zararsizlantirish uchun dunyo bo'ylab xavfli poygaga kirishadi.",
+    "episodes": []
+  },
+  {
+    "id": "32",
+    "title": "Venom: So'nggi raqs",
+    "orig": "Venom: The Last Dance",
+    "category": "tarjima",
+    "studio": "Sony Pictures",
+    "genres": [
+      "Jangari",
+      "Fantastika",
+      "Sarguzasht"
+    ],
+    "year": 2024,
+    "country": "AQSH",
+    "imdb": 6,
+    "views": 463000,
+    "quality": "4K Ultra HD",
+    "premiere": true,
+    "poster": "https://m.media-amazon.com/images/M/MV5BZDMyYWU4NzItZDY0MC00ODE2LTkyYTMtMzNkNDdmYmFhZDg0XkEyXkFqcGc@._V1_FMjpg_UX800_.jpg",
+    "backdrop": "https://i.ytimg.com/vi/__2bjWbetsA/maxresdefault.jpg",
+    "video": "https://www.youtube.com/watch?v=__2bjWbetsA",
+    "desc": "Eddi Brok va simbiont Venom ikki dunyo ta'qibiga uchraydi. Tarmoq torayib borar ekan, ikki ajralmas do'st o'zlarining so'nggi raqsiga nuqta qo'yuvchi og'ir qaror qabul qilishga majbur bo'lishadi.",
+    "episodes": []
+  },
+  {
+    "id": "33",
+    "title": "O'rgimchak odam: Olamlar aro",
+    "orig": "Spider-Man: Across the Spider-Verse",
+    "category": "multfilm",
+    "studio": "Sony Pictures",
+    "genres": [
+      "Fantastika",
+      "Sarguzasht",
+      "Jangari",
+      "Oilaviy"
+    ],
+    "year": 2023,
+    "country": "AQSH",
+    "imdb": 8.6,
+    "views": 438000,
+    "quality": "4K Ultra HD",
+    "premiere": false,
+    "poster": "https://m.media-amazon.com/images/M/MV5BNThiZjA3MjItZGY5Ni00ZmJhLWEwN2EtOTBlYTA4Y2E0M2ZmXkEyXkFqcGc@._V1_FMjpg_UX800_.jpg",
+    "backdrop": "https://i.ytimg.com/vi/cqGjhVJWtEg/maxresdefault.jpg",
+    "video": "https://www.youtube.com/watch?v=cqGjhVJWtEg",
+    "desc": "Maylz Morales Gven Steysi bilan qayta uchrashib, multikoinot bo'ylab aqlbovar qilmas sarguzashtga otlanadi va u yerda barcha olamlarni himoya qiluvchi O'rgimchak-odamlar jamiyati bilan to'qnashadi.",
+    "episodes": []
+  },
+  {
+    "id": "34",
+    "title": "Boshqotirma 2",
+    "orig": "Inside Out 2",
+    "category": "multfilm",
+    "studio": "Walt Disney Pictures",
+    "genres": [
+      "Komediya",
+      "Oilaviy",
+      "Sarguzasht"
+    ],
+    "year": 2024,
+    "country": "AQSH",
+    "imdb": 7.6,
+    "views": 521000,
+    "quality": "4K Ultra HD",
+    "premiere": true,
+    "poster": "https://m.media-amazon.com/images/M/MV5BYWY3MDE2Y2UtOTE3Zi00MGUzLTg2MTItZjE1ZWVkMGVlODRmXkEyXkFqcGc@._V1_FMjpg_UX800_.jpg",
+    "backdrop": "https://i.ytimg.com/vi/LEjhY15eCx0/maxresdefault.jpg",
+    "video": "https://www.youtube.com/watch?v=LEjhY15eCx0",
+    "desc": "O'smirlik davriga qadam qo'ygan Raylining ong markazida katta o'zgarishlar boshlanadi: Quvonch va uning do'stlari yoniga Xavotir, Hasad va Zerikish kabi kutilmagan yangi tuyg'ular ko'chib keladi.",
+    "episodes": []
+  },
+  {
+    "id": "35",
+    "title": "Qirol Sher",
+    "orig": "The Lion King",
+    "category": "multfilm",
+    "studio": "Walt Disney Pictures",
+    "genres": [
+      "Sarguzasht",
+      "Oilaviy",
+      "Drama"
+    ],
+    "year": 2019,
+    "country": "AQSH",
+    "imdb": 6.8,
+    "views": 487000,
+    "quality": "4K Ultra HD",
+    "premiere": false,
+    "poster": "https://m.media-amazon.com/images/M/MV5BMjIwMjE1Nzc4NV5BMl5BanBnXkFtZTgwNDg4OTA1NzM@._V1_FMjpg_UX800_.jpg",
+    "backdrop": "https://i.ytimg.com/vi/7TavVZMewpY/maxresdefault.jpg",
+    "video": "https://www.youtube.com/watch?v=7TavVZMewpY",
+    "desc": "Afrika savannasida yovuz amakisi Skarning xiyonatidan so'ng quvg'in qilingan yosh shershoh Simba sodiq do'stlari Timon va Pumba yordamida ulg'ayib, o'z qonuniy taxtini qaytarib olish uchun qaytadi.",
+    "episodes": []
+  },
+  {
+    "id": "36",
+    "title": "Kalmar o'yini",
+    "orig": "Squid Game",
+    "category": "serial",
+    "studio": "Netflix Studios",
+    "genres": [
+      "Triller",
+      "Drama",
+      "Detektiv"
+    ],
+    "year": 2024,
+    "country": "Janubiy Koreya",
+    "imdb": 8,
+    "views": 695000,
+    "quality": "4K Ultra HD",
+    "premiere": true,
+    "poster": "https://m.media-amazon.com/images/M/MV5BMDcxYjg1OTctYmUxZi00ZjhjLWIwNTMtNmI2M2Y4OTU1YWU2XkEyXkFqcGc@._V1_FMjpg_UX800_.jpg",
+    "backdrop": "https://i.ytimg.com/vi/oqxAJKy0ii4/maxresdefault.jpg",
+    "video": "https://www.youtube.com/watch?v=oqxAJKy0ii4",
+    "desc": "Moliyaviy qiyinchilikka botgan 456 nafar ishtirokchi ulkan pul mukofoti uchun sirli bolalar o'yinlarida qatnashish taklifini qabul qiladi. Biroq mag'lubiyatning narxi — o'lim.",
     "episodes": [
       {
         "num": 1,
-        "title": "Ulug'vor maqsad",
-        "url": "https://vjs.zencdn.net/v/oceans.mp4"
+        "title": "1-fasl 1-qism: Qizil chiroq, yashil chiroq",
+        "url": "https://www.youtube.com/watch?v=oqxAJKy0ii4"
       },
       {
         "num": 2,
-        "title": "Varianlar jangi",
-        "url": "https://media.w3.org/2010/05/sintel/trailer.mp4"
+        "title": "1-fasl 2-qism: Do'zax",
+        "url": "https://www.youtube.com/watch?v=oqxAJKy0ii4"
       },
       {
-        "num": 3,
-        "title": "Lamentis-1",
-        "url": "https://vjs.zencdn.net/v/oceans.mp4"
+        "num": 1,
+        "title": "2-fasl 1-qism: Qaytish va yangi o'yin",
+        "url": "https://www.youtube.com/watch?v=Ed1sGgHUo88"
       },
       {
-        "num": 4,
-        "title": "Yashirin haqiqat",
-        "url": "https://media.w3.org/2010/05/sintel/trailer.mp4"
+        "num": 2,
+        "title": "2-fasl 2-qism: Ovoz berish kechasi",
+        "url": "https://www.youtube.com/watch?v=Ed1sGgHUo88"
       }
     ]
   }
@@ -927,7 +1533,23 @@
 
     let currentMovie = null;
 
-    // Render Grid
+    function buildStreamMarkup(url, backdrop) {
+      const isYt = url.includes("youtube") || url.includes("youtu.be");
+      if (isYt) {
+        const id = url.match(/(?:watch\?v=|embed\/|shorts\/|youtu\.be\/)([\w-]{11})/)?.[1] || "";
+        return `
+          <div style="position:relative;width:100%;height:100%;overflow:hidden;background:#000;">
+            <iframe
+              src="https://www.youtube.com/embed/${id}?autoplay=1&controls=1&modestbranding=1&rel=0&iv_load_policy=3"
+              style="width:100%;height:100%;border:none;"
+              allow="autoplay; encrypted-media; fullscreen"
+              allowfullscreen
+            ></iframe>
+          </div>`;
+      }
+      return `<video src="${url}" poster="${backdrop || ''}" controls autoplay playsinline style="width:100%;height:100%;"></video>`;
+    }
+
     function renderMovies(list) {
       const grid = document.getElementById("movieGrid");
       if (!list.length) {
@@ -939,6 +1561,7 @@
           <div class="card-poster">
             <img src="${m.poster}" alt="${m.title}" loading="lazy">
             <div class="card-badges">
+              <span class="card-badge" style="background:rgba(0,0,0,0.82);border:1px solid rgba(255,255,255,0.2);color:#fff;">${(m.studio || '').replace(' Studios', '').replace(' Pictures', '')}</span>
               <span class="card-badge badge-quality">${m.quality.split(' ')[0]}</span>
               ${m.premiere ? '<span class="card-badge badge-premiere">Premyera</span>' : ''}
             </div>
@@ -955,8 +1578,9 @@
       `).join('');
     }
 
-    // Filter Logic
     function applyFilters() {
+      const studioEl = document.getElementById("filterStudio");
+      const studio = studioEl ? studioEl.value : "";
       const cat = document.getElementById("filterCategory").value;
       const genre = document.getElementById("filterGenre").value;
       const year = document.getElementById("filterYear").value;
@@ -964,12 +1588,13 @@
       const q = document.getElementById("searchInput").value.trim().toLowerCase();
 
       let list = MOVIES.filter(m => {
+        if (studio && m.studio !== studio) return false;
         if (cat && m.category !== cat) return false;
         if (genre && !m.genres.includes(genre)) return false;
         if (year) {
           if (year === "2010" && (m.year < 2010 || m.year > 2015)) return false;
           if (year === "2000" && (m.year < 2000 || m.year > 2009)) return false;
-          if (!year.includes("0") && m.year !== Number(year)) return false;
+          if (!["2010", "2000"].includes(year) && m.year !== Number(year)) return false;
         }
         if (q && !m.title.toLowerCase().includes(q) && !m.orig.toLowerCase().includes(q)) return false;
         return true;
@@ -978,6 +1603,7 @@
       if (sort === "rating") list.sort((a, b) => b.imdb - a.imdb);
       else if (sort === "views") list.sort((a, b) => b.views - a.views);
 
+      document.getElementById("sectionTitle").innerText = studio ? `${studio} kinolari (${list.length})` : `Barcha kinolar (${list.length})`;
       renderMovies(list);
     }
 
@@ -991,6 +1617,8 @@
     }
 
     function resetFilters() {
+      const studioEl = document.getElementById("filterStudio");
+      if (studioEl) studioEl.value = "";
       document.getElementById("filterCategory").value = "";
       document.getElementById("filterGenre").value = "";
       document.getElementById("filterYear").value = "";
@@ -999,27 +1627,21 @@
       applyFilters();
     }
 
-    // Player Modal
     function openPlayer(id) {
       const m = MOVIES.find(x => x.id === id);
       if (!m) return;
       currentMovie = m;
-      document.getElementById("modalMovieTitle").innerText = m.title;
+      document.getElementById("modalMovieTitle").innerText = m.title + " (" + m.studio + ")";
       document.getElementById("modalImdb").innerText = "★ IMDb " + m.imdb.toFixed(1);
       document.getElementById("modalYear").innerText = m.year;
       document.getElementById("modalCountry").innerText = m.country;
       document.getElementById("modalQuality").innerText = m.quality;
       document.getElementById("modalDesc").innerText = m.desc;
+      document.getElementById("modalDownloadBtn").style.display = /\.(mp4|webm|mkv)(\?|$)/i.test(m.video) ? "inline-flex" : "none";
       document.getElementById("modalDownloadBtn").href = m.video;
 
       const vBox = document.getElementById("videoContainer");
-      const isYt = m.video.includes("youtube") || m.video.includes("youtu.be");
-      if (isYt) {
-        const id = m.video.match(/(?:watch\?v=|embed\/|shorts\/|youtu\.be\/)([\w-]{11})/)?.[1] || "";
-        vBox.innerHTML = `<iframe src="https://www.youtube.com/embed/${id}?autoplay=1" style="width: 100%; height: 100%; border: none;" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>`;
-      } else {
-        vBox.innerHTML = `<video src="${m.video}" poster="${m.backdrop}" controls autoplay playsinline style="width: 100%; height: 100%;"></video>`;
-      }
+      vBox.innerHTML = buildStreamMarkup(m.video, m.backdrop);
 
       const epBox = document.getElementById("episodesBlock");
       const epList = document.getElementById("episodesList");
@@ -1039,13 +1661,7 @@
       if (!currentMovie || !currentMovie.episodes) return;
       const ep = currentMovie.episodes[index];
       const vBox = document.getElementById("videoContainer");
-      const isYt = ep.url.includes("youtube") || ep.url.includes("youtu.be");
-      if (isYt) {
-        const id = ep.url.match(/(?:watch\?v=|embed\/|shorts\/|youtu\.be\/)([\w-]{11})/)?.[1] || "";
-        vBox.innerHTML = `<iframe src="https://www.youtube.com/embed/${id}?autoplay=1" style="width: 100%; height: 100%; border: none;" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>`;
-      } else {
-        vBox.innerHTML = `<video src="${ep.url}" controls autoplay playsinline style="width: 100%; height: 100%;"></video>`;
-      }
+      vBox.innerHTML = buildStreamMarkup(ep.url, currentMovie.backdrop);
       document.querySelectorAll(".ep-btn").forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
     }
@@ -1056,7 +1672,6 @@
       document.getElementById("playerModal").classList.remove("open");
     }
 
-    // Random Modal
     function openRandomPicker() {
       document.getElementById("randomModal").classList.add("open");
       pickRandomMovie();
@@ -1073,6 +1688,7 @@
         <div style="background: var(--panel-2); border: 1px solid var(--line); border-radius: 12px; padding: 14px; display: flex; gap: 14px; text-align: left; align-items: center;">
           <img src="${m.poster}" style="width: 70px; height: 100px; object-fit: cover; border-radius: 8px;">
           <div>
+            <div style="font-size: 11px; color: var(--accent); font-weight: 700;">${m.studio}</div>
             <div style="font-weight: 700; font-size: 16px;">${m.title}</div>
             <div style="font-size: 12px; color: var(--gold); margin: 4px 0;">★ IMDb ${m.imdb.toFixed(1)} • ${m.year}</div>
             <div style="font-size: 12px; color: var(--muted);">${m.genres.join(', ')}</div>
@@ -1084,15 +1700,14 @@
       `;
     }
 
-    // Init Hero & Grid
-    const hero = MOVIES[0]; // Qasoskorlar: Intiho
+    const hero = MOVIES[0];
     document.getElementById("heroBanner").style.backgroundImage = `url('${hero.backdrop}')`;
     document.getElementById("heroTitle").innerText = hero.title;
     document.getElementById("heroDesc").innerText = hero.desc;
     document.getElementById("heroImdb").innerText = hero.imdb.toFixed(1);
     document.getElementById("heroPlayBtn").onclick = () => openPlayer(hero.id);
 
-    renderMovies(MOVIES);
+    applyFilters();
   </script>
 </body>
 </html>

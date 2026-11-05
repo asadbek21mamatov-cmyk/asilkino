@@ -80,11 +80,13 @@ function Catalog() {
     ? `"${q}" bo'yicha qidiruv natijalari`
     : premiere
       ? "Premyeralar"
-      : filters.genre
-        ? `${filters.genre} janridagi kinolar`
-        : filters.cat
-          ? CATEGORY_LABELS[filters.cat as Category]
-          : "Barcha kinolar";
+      : filters.studio
+        ? `${filters.studio} kinolari`
+        : filters.genre
+          ? `${filters.genre} janridagi kinolar`
+          : filters.cat
+            ? CATEGORY_LABELS[filters.cat as Category]
+            : "Barcha kinolar";
 
   return (
     <div>

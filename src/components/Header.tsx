@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { Clapperboard, Menu, Search, Shuffle, X, ChevronDown } from "lucide-react";
-import { ALL_GENRES } from "@/lib/types";
+import { ALL_GENRES, ALL_STUDIOS } from "@/lib/types";
 
 const NAV = [
   { href: "/", label: "Bosh sahifa" },
@@ -20,6 +20,7 @@ export default function Header() {
   const [q, setQ] = useState("");
   const [open, setOpen] = useState(false);
   const [genresOpen, setGenresOpen] = useState(false);
+  const [studiosOpen, setStudiosOpen] = useState(false);
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,6 +52,29 @@ export default function Header() {
               {n.label}
             </Link>
           ))}
+          <div className="relative" onMouseLeave={() => setStudiosOpen(false)}>
+            <button
+              onMouseEnter={() => setStudiosOpen(true)}
+              onClick={() => setStudiosOpen((v) => !v)}
+              className="flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium text-muted hover:bg-panel-2 hover:text-white"
+            >
+              Studiyalar <ChevronDown className="h-4 w-4" />
+            </button>
+            {studiosOpen && (
+              <div className="absolute left-0 top-full grid w-64 grid-cols-1 gap-1 rounded-xl border border-line bg-panel p-2 shadow-2xl">
+                {ALL_STUDIOS.map((s) => (
+                  <Link
+                    key={s}
+                    href={`/kinolar?studio=${encodeURIComponent(s)}`}
+                    onClick={() => setStudiosOpen(false)}
+                    className="rounded-md px-3 py-1.5 text-sm font-medium text-muted hover:bg-panel-2 hover:text-accent"
+                  >
+                    {s}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
           <div className="relative" onMouseLeave={() => setGenresOpen(false)}>
             <button
               onMouseEnter={() => setGenresOpen(true)}

@@ -11,9 +11,9 @@ import { formatViews, incrementViews } from "@/lib/store";
 import { CATEGORY_LABELS } from "@/lib/types";
 
 const QUALITIES = [
+  { label: "4K Ultra HD", size: "≈ 4.8 GB" },
   { label: "1080p Full HD", size: "≈ 2.1 GB" },
   { label: "720p HD", size: "≈ 1.1 GB" },
-  { label: "480p", size: "≈ 560 MB" },
 ];
 
 export default function MoviePage() {
@@ -36,7 +36,13 @@ export default function MoviePage() {
     if (!movie) return [];
     return movies
       .filter((m) => m.id !== movie.id)
-      .map((m) => ({ m, score: m.genres.filter((g) => movie.genres.includes(g)).length + (m.category === movie.category ? 1 : 0) }))
+      .map((m) => ({
+        m,
+        score:
+          (m.studio === movie.studio ? 2 : 0) +
+          m.genres.filter((g) => movie.genres.includes(g)).length +
+          (m.category === movie.category ? 1 : 0),
+      }))
       .filter((x) => x.score > 0)
       .sort((a, b) => b.score - a.score)
       .slice(0, 6)
@@ -60,12 +66,40 @@ export default function MoviePage() {
 
   const episode = movie.episodes[epIndex];
   const currentSrc = episode?.videoUrl ?? movie.videoUrl;
+  const isDirectVideoFile =
+    /\.(mp4|webm|mkv|mov|m4v)(\?|$)/i.test(currentSrc) ||
+    currentSrc.includes("/storage/v1/object/public/");
+
   const info: [string, React.ReactNode][] = [
-    ["Turi", <Link key="c" className="text-accent hover:underline" href={`/kinolar?cat=${movie.category}`}>{CATEGORY_LABELS[movie.category]}</Link>],
-    ["Studiya", <span key="st" className="font-semibold text-accent">{movie.studio || "Marvel Studios"}</span>],
+    [
+      "Turi",
+      <Link key="c" className="text-accent hover:underline" href={`/kinolar?cat=${movie.category}`}>
+        {CATEGORY_LABELS[movie.category]}
+      </Link>,
+    ],
+    [
+      "Studiya",
+      <Link
+        key="st"
+        className="font-semibold text-accent hover:underline"
+        href={`/kinolar?studio=${encodeURIComponent(movie.studio || "Marvel Studios")}`}
+      >
+        {movie.studio || "Marvel Studios"}
+      </Link>,
+    ],
     ["Original nomi", movie.originalTitle || "—"],
-    ["Yili", <Link key="y" className="hover:text-accent" href={`/kinolar?year=${movie.year}`}>{movie.year}</Link>],
-    ["Davlati", <Link key="co" className="hover:text-accent" href={`/kinolar?country=${encodeURIComponent(movie.country)}`}>{movie.country}</Link>],
+    [
+      "Yili",
+      <Link key="y" className="hover:text-accent" href={`/kinolar?year=${movie.year}`}>
+        {movie.year}
+      </Link>,
+    ],
+    [
+      "Davlati",
+      <Link key="co" className="hover:text-accent" href={`/kinolar?country=${encodeURIComponent(movie.country)}`}>
+        {movie.country}
+      </Link>,
+    ],
     [
       "Janri",
       <span key="g" className="flex flex-wrap gap-x-1">
@@ -90,13 +124,27 @@ export default function MoviePage() {
       {/* Fon */}
       <div className="relative -mx-3 -mt-5 mb-6 overflow-hidden sm:-mx-5">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={movie.backdrop} alt="" className="absolute inset-0 h-full w-full scale-110 object-cover opacity-25 blur-sm" />
+        <img
+          src={movie.backdrop}
+          alt=""
+          onError={(e) => {
+            if (movie.poster && e.currentTarget.src !== movie.poster) e.currentTarget.src = movie.poster;
+          }}
+          className="absolute inset-0 h-full w-full scale-110 object-cover opacity-25 blur-sm"
+        />
         <div className="absolute inset-0 bg-gradient-to-b from-bg/40 via-bg/80 to-bg" />
 
         <div className="relative grid gap-6 px-3 pb-4 pt-6 sm:px-5 md:grid-cols-[260px_1fr]">
           <div className="mx-auto w-52 md:w-full">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={movie.poster} alt={movie.title} className="aspect-[2/3] w-full rounded-xl border border-line object-cover shadow-2xl" />
+            <img
+              src={movie.poster}
+              alt={movie.title}
+              onError={(e) => {
+                if (movie.backdrop && e.currentTarget.src !== movie.backdrop) e.currentTarget.src = movie.backdrop;
+              }}
+              className="aspect-[2/3] w-full rounded-xl border border-line object-cover shadow-2xl"
+            />
             <div className="mt-3 grid grid-cols-2 gap-2 text-center text-sm">
               <div className="rounded-lg border border-line bg-panel p-2">
                 <div className="text-xs text-muted">IMDb</div>
@@ -114,12 +162,23 @@ export default function MoviePage() {
           <div>
             <nav className="mb-2 text-xs text-muted">
               <Link href="/" className="hover:text-accent">Bosh sahifa</Link> /{" "}
-              <Link href={`/kinolar?cat=${movie.category}`} className="hover:text-accent">{CATEGORY_LABELS[movie.category]}</Link> / {movie.title}
+              <Link href={`/kinolar?cat=${movie.category}`} className="hover:text-accent">
+                {CATEGORY_LABELS[movie.category]}
+              </Link>{" "}
+              / {movie.title}
             </nav>
             <h1 className="text-2xl font-extrabold sm:text-4xl">
               {movie.title} <span className="text-lg font-medium text-muted">({movie.year})</span>
             </h1>
             <div className="mt-2 flex flex-wrap items-center gap-3 text-sm text-muted">
+              {movie.studio && (
+                <Link
+                  href={`/kinolar?studio=${encodeURIComponent(movie.studio)}`}
+                  className="rounded border border-white/20 bg-panel-2 px-2 py-0.5 text-xs font-extrabold uppercase text-white hover:border-accent"
+                >
+                  {movie.studio}
+                </Link>
+              )}
               <span className="rounded bg-accent px-2 py-0.5 text-xs font-bold text-white">{movie.quality}</span>
               {movie.isPremiere && <span className="rounded bg-gold px-2 py-0.5 text-xs font-bold text-black">PREMYERA</span>}
               <span className="flex items-center gap-1"><Calendar className="h-4 w-4" /> {movie.year}</span>
@@ -162,23 +221,35 @@ export default function MoviePage() {
         <p className="leading-relaxed text-gray-300">{movie.description}</p>
       </section>
 
-      {/* Pleer */}
+      {/* Netflix uslubidagi AsilKino Pleer */}
       <section id="player" className="mt-6 scroll-mt-20 rounded-xl border border-line bg-panel p-3 sm:p-5">
-        <h2 className="mb-3 flex items-center gap-2 text-lg font-bold">
-          <Play className="h-5 w-5 text-accent" /> {movie.title} — onlayn tomosha qilish
-          {episode && <span className="text-sm font-normal text-muted">({episode.season}-fasl, {episode.episode}-qism)</span>}
-        </h2>
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+          <h2 className="flex items-center gap-2 text-lg font-bold">
+            <Play className="h-5 w-5 text-accent" /> {movie.title} — onlayn tomosha qilish
+            {episode && (
+              <span className="text-sm font-normal text-muted">
+                ({episode.season}-fasl, {episode.episode}-qism: {episode.title})
+              </span>
+            )}
+          </h2>
+          <span className="rounded-full border border-accent/40 bg-accent/10 px-3 py-0.5 text-xs font-semibold text-accent">
+            Netflix Cinema Player
+          </span>
+        </div>
+
         <VideoPlayer
           src={currentSrc}
           poster={movie.backdrop}
-          title={episode ? `${movie.title} (${episode.episode}-qism)` : movie.title}
+          title={episode ? `${movie.title} — ${episode.season}-fasl ${episode.episode}-qism (${episode.title})` : movie.title}
           studio={movie.studio}
           autoPlay={false}
         />
 
         {movie.episodes.length > 0 && (
-          <div className="mt-4">
-            <h3 className="mb-2 text-sm font-semibold text-muted">Qismlar:</h3>
+          <div className="mt-4 rounded-xl border border-line bg-panel-2/60 p-3.5">
+            <h3 className="mb-2.5 text-xs font-bold uppercase tracking-wider text-muted">
+              Mavjud qismlar ({movie.episodes.length} ta):
+            </h3>
             <div className="flex flex-wrap gap-2">
               {movie.episodes.map((e, i) => (
                 <button
@@ -186,11 +257,12 @@ export default function MoviePage() {
                   onClick={() => setEpIndex(i)}
                   title={`${e.title} • ${e.duration}`}
                   className={`rounded-lg border px-4 py-2 text-sm font-medium transition ${
-                    i === epIndex ? "border-accent bg-accent text-white" : "border-line bg-panel-2 hover:border-accent"
+                    i === epIndex
+                      ? "border-accent bg-accent text-white shadow-lg shadow-accent/25"
+                      : "border-line bg-panel hover:border-accent"
                   }`}
                 >
-                  {e.season > 1 ? `${e.season}-f ` : ""}
-                  {e.episode}-qism
+                  {e.season}-fasl {e.episode}-qism • <span className="text-xs opacity-85">{e.title}</span>
                 </button>
               ))}
             </div>
@@ -201,25 +273,39 @@ export default function MoviePage() {
       {/* Yuklab olish */}
       <section id="download" className="mt-6 scroll-mt-20 rounded-xl border border-line bg-panel p-5">
         <h2 className="mb-3 flex items-center gap-2 text-lg font-bold">
-          <Download className="h-5 w-5 text-accent" /> Yuklab olish {episode && `(${episode.episode}-qism)`}
+          <Download className="h-5 w-5 text-accent" /> Yuklab olish va sifat formatlari {episode && `(${episode.episode}-qism)`}
         </h2>
         <div className="grid gap-3 sm:grid-cols-3">
-          {QUALITIES.map((q) => (
-            <a
-              key={q.label}
-              href={currentSrc}
-              download
-              target="_blank"
-              rel="noreferrer"
-              className="flex items-center justify-between rounded-lg border border-line bg-panel-2 px-4 py-3 transition hover:border-accent"
-            >
-              <span>
-                <span className="block font-semibold">{q.label}</span>
-                <span className="text-xs text-muted">MP4 • {q.size}</span>
-              </span>
-              <Download className="h-5 w-5 text-accent" />
-            </a>
-          ))}
+          {QUALITIES.map((q) =>
+            isDirectVideoFile ? (
+              <a
+                key={q.label}
+                href={currentSrc}
+                download
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center justify-between rounded-lg border border-line bg-panel-2 px-4 py-3 transition hover:border-accent"
+              >
+                <span>
+                  <span className="block font-semibold">{q.label}</span>
+                  <span className="text-xs text-muted">MP4 • {q.size}</span>
+                </span>
+                <Download className="h-5 w-5 text-accent" />
+              </a>
+            ) : (
+              <a
+                key={q.label}
+                href="#player"
+                className="flex items-center justify-between rounded-lg border border-line bg-panel-2 px-4 py-3 transition hover:border-accent"
+              >
+                <span>
+                  <span className="block font-semibold">{q.label}</span>
+                  <span className="text-xs text-muted">Onlayn oqim • {q.size}</span>
+                </span>
+                <Play className="h-5 w-5 text-accent" />
+              </a>
+            )
+          )}
         </div>
       </section>
 
@@ -235,7 +321,7 @@ export default function MoviePage() {
       )}
 
       {trailerOpen && (
-        <div className="fixed inset-0 z-50 grid place-items-center bg-black/85 p-4" onClick={() => setTrailerOpen(false)}>
+        <div className="fixed inset-0 z-50 grid place-items-center bg-black/90 p-4" onClick={() => setTrailerOpen(false)}>
           <div className="w-full max-w-4xl animate-fade-in" onClick={(e) => e.stopPropagation()}>
             <div className="mb-2 flex items-center justify-between">
               <h3 className="font-bold">{movie.title} — rasmiy treyler</h3>
@@ -243,7 +329,13 @@ export default function MoviePage() {
                 <X className="h-6 w-6" />
               </button>
             </div>
-            <VideoPlayer src={movie.trailerUrl} autoPlay />
+            <VideoPlayer
+              src={movie.trailerUrl}
+              poster={movie.backdrop}
+              title={`${movie.title} — Rasmiy treyler`}
+              studio={movie.studio}
+              autoPlay
+            />
           </div>
         </div>
       )}
