@@ -19,6 +19,7 @@ const emptyMovie = (): Movie => ({
   originalTitle: "",
   category: "tarjima",
   genres: [],
+  studio: "Marvel Studios",
   year: new Date().getFullYear(),
   country: "AQSH",
   duration: "1 s 45 daq",
@@ -166,6 +167,14 @@ function MovieForm({ initial, onClose, onSaved }: { initial: Movie; onClose: () 
                 <option key={c} value={c}>{CATEGORY_LABELS[c]}</option>
               ))}
             </select>
+          </Field>
+          <Field label="Kino studiya">
+            <input className="input" list="studios" value={m.studio} onChange={(e) => set("studio", e.target.value)} placeholder="Marvel Studios, DC, Warner Bros..." />
+            <datalist id="studios">
+              {["Marvel Studios", "DC Studios", "20th Century Fox", "Warner Bros.", "Universal Pictures", "Sony Pictures", "Paramount Pictures", "Walt Disney Pictures"].map((s) => (
+                <option key={s} value={s} />
+              ))}
+            </datalist>
           </Field>
           <Field label="Yili">
             <input className="input" type="number" min={1900} max={2100} value={m.year} onChange={(e) => set("year", Number(e.target.value))} />

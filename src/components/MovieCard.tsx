@@ -15,6 +15,11 @@ export default function MovieCard({ movie }: { movie: Movie }) {
           className="h-full w-full object-cover transition duration-500 group-hover:scale-110 group-hover:brightness-50"
         />
         <div className="absolute left-2 top-2 flex flex-col gap-1">
+          {movie.studio && (
+            <span className="rounded bg-black/85 backdrop-blur-sm border border-white/20 px-1.5 py-0.5 text-[9px] font-extrabold uppercase text-white tracking-wider shadow">
+              {movie.studio.replace(" Studios", "").replace(" Pictures", "")}
+            </span>
+          )}
           <span className="rounded bg-accent px-1.5 py-0.5 text-[10px] font-bold uppercase text-white">
             {movie.quality.split(" ")[0]}
           </span>

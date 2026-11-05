@@ -62,6 +62,7 @@ export default function MoviePage() {
   const currentSrc = episode?.videoUrl ?? movie.videoUrl;
   const info: [string, React.ReactNode][] = [
     ["Turi", <Link key="c" className="text-accent hover:underline" href={`/kinolar?cat=${movie.category}`}>{CATEGORY_LABELS[movie.category]}</Link>],
+    ["Studiya", <span key="st" className="font-semibold text-accent">{movie.studio || "Marvel Studios"}</span>],
     ["Original nomi", movie.originalTitle || "—"],
     ["Yili", <Link key="y" className="hover:text-accent" href={`/kinolar?year=${movie.year}`}>{movie.year}</Link>],
     ["Davlati", <Link key="co" className="hover:text-accent" href={`/kinolar?country=${encodeURIComponent(movie.country)}`}>{movie.country}</Link>],
@@ -167,7 +168,13 @@ export default function MoviePage() {
           <Play className="h-5 w-5 text-accent" /> {movie.title} — onlayn tomosha qilish
           {episode && <span className="text-sm font-normal text-muted">({episode.season}-fasl, {episode.episode}-qism)</span>}
         </h2>
-        <VideoPlayer src={currentSrc} poster={movie.backdrop} fallbackUrl={movie.trailerUrl} />
+        <VideoPlayer
+          src={currentSrc}
+          poster={movie.backdrop}
+          title={episode ? `${movie.title} (${episode.episode}-qism)` : movie.title}
+          studio={movie.studio}
+          autoPlay={false}
+        />
 
         {movie.episodes.length > 0 && (
           <div className="mt-4">

@@ -27,6 +27,7 @@ function Catalog() {
     genre: params.get("genre") ?? "",
     year: params.get("year") ?? "",
     country: params.get("country") ?? "",
+    studio: params.get("studio") ?? "",
   };
   const q = params.get("q") ?? "";
   const sort = params.get("sort") ?? "new";

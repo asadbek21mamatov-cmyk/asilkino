@@ -16,6 +16,7 @@ export interface Movie {
   originalTitle: string;
   category: Category;
   genres: string[];
+  studio: string;
   year: number;
   country: string;
   duration: string;
@@ -43,6 +44,17 @@ export const CATEGORY_LABELS: Record<Category, string> = {
   multfilm: "Multfilmlar",
 };
 
+export const ALL_STUDIOS = [
+  "Marvel Studios",
+  "DC Studios",
+  "20th Century Fox",
+  "Warner Bros.",
+  "Universal Pictures",
+  "Sony Pictures",
+  "Paramount Pictures",
+  "Walt Disney Pictures",
+];
+
 export const ALL_GENRES = [
   "Jangari",
   "Sarguzasht",
@@ -63,14 +75,13 @@ export const ALL_GENRES = [
 export const ALL_COUNTRIES = [
   "AQSH",
   "Buyuk Britaniya",
-  "Niderlandiya",
   "Fransiya",
-  "Turkiya",
   "Janubiy Koreya",
   "Yaponiya",
+  "Turkiya",
   "Hindiston",
-  "Rossiya",
-  "O'zbekiston",
   "Germaniya",
-  "Ispaniya",
+  "Kanada",
+  "Avstraliya",
+  "O'zbekiston",
 ];
