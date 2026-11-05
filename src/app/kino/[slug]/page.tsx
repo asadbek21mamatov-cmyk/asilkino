@@ -167,7 +167,7 @@ export default function MoviePage() {
           <Play className="h-5 w-5 text-accent" /> {movie.title} — onlayn tomosha qilish
           {episode && <span className="text-sm font-normal text-muted">({episode.season}-fasl, {episode.episode}-qism)</span>}
         </h2>
-        <VideoPlayer src={currentSrc} poster={movie.backdrop} />
+        <VideoPlayer src={currentSrc} poster={movie.backdrop} fallbackUrl={movie.trailerUrl} />
 
         {movie.episodes.length > 0 && (
           <div className="mt-4">

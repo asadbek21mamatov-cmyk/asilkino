@@ -638,7 +638,7 @@
         premiere: false,
         poster: "https://picsum.photos/seed/bigbuck/400/600",
         backdrop: `${V}/images/BigBuckBunny.jpg`,
-        video: `${V}/BigBuckBunny.mp4`,
+        video: "https://www.youtube.com/watch?v=aqz-KE-bpKQ",
         desc: "O'rmondagi mehribon ulkan quyon Bak tinch hayot kechiradi. Ammo uch nafar shumtaka kemiruvchi uning do'stlarini xafa qilganda, Bak ularga saboq beradi."
       },
       {
@@ -655,7 +655,7 @@
         premiere: true,
         poster: "https://picsum.photos/seed/sintel/400/600",
         backdrop: `${V}/images/Sintel.jpg`,
-        video: `${V}/Sintel.mp4`,
+        video: "https://www.youtube.com/watch?v=eRsGyueVLvQ",
         desc: "Yolg'iz qiz Sintel yaralangan kichik ajdarchani parvarishlaydi. Bir kun ajdarcha o'g'irlanadi va Sintel uni qutqarish uchun xatarli safarga otlanadi."
       },
       {
@@ -672,7 +672,7 @@
         premiere: true,
         poster: "https://picsum.photos/seed/tearsofsteel/400/600",
         backdrop: `${V}/images/TearsOfSteel.jpg`,
-        video: `${V}/TearsOfSteel.mp4`,
+        video: "https://www.youtube.com/watch?v=R6MlUcmOul8",
         desc: "Kelajakdagi Amsterdam. Bir guruh olimlar va jangchilar dunyoni robotlar bosqinidan qutqarish uchun eski xotiralar ichiga kiradilar."
       },
       {
@@ -689,7 +689,7 @@
         premiere: false,
         poster: "https://picsum.photos/seed/elephantsdream/400/600",
         backdrop: `${V}/images/ElephantsDream.jpg`,
-        video: `${V}/ElephantsDream.mp4`,
+        video: "https://www.youtube.com/watch?v=TLkA0RELQ1g",
         desc: "Ikki qahramon sirli mexanik dunyoda kezib yuradi. Haqiqat va illyuziyalar ularning aqlini sinovdan o'tkazadi."
       },
       {
@@ -927,7 +927,13 @@
       document.getElementById("modalDownloadBtn").href = m.video;
 
       const vBox = document.getElementById("videoContainer");
-      vBox.innerHTML = `<video src="${m.video}" poster="${m.backdrop}" controls autoplay playsinline style="width: 100%; height: 100%;"></video>`;
+      const isYt = m.video.includes("youtube") || m.video.includes("youtu.be");
+      if (isYt) {
+        const id = m.video.match(/(?:watch\?v=|embed\/|shorts\/|youtu\.be\/)([\w-]{11})/)?.[1] || "";
+        vBox.innerHTML = `<iframe src="https://www.youtube.com/embed/${id}?autoplay=1" style="width: 100%; height: 100%; border: none;" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>`;
+      } else {
+        vBox.innerHTML = `<video src="${m.video}" poster="${m.backdrop}" controls autoplay playsinline style="width: 100%; height: 100%;"></video>`;
+      }
 
       const epBox = document.getElementById("episodesBlock");
       const epList = document.getElementById("episodesList");
@@ -946,10 +952,13 @@
     function switchEpisode(index, btn) {
       if (!currentMovie || !currentMovie.episodes) return;
       const ep = currentMovie.episodes[index];
-      const video = document.querySelector("#videoContainer video");
-      if (video) {
-        video.src = ep.url;
-        video.play();
+      const vBox = document.getElementById("videoContainer");
+      const isYt = ep.url.includes("youtube") || ep.url.includes("youtu.be");
+      if (isYt) {
+        const id = ep.url.match(/(?:watch\?v=|embed\/|shorts\/|youtu\.be\/)([\w-]{11})/)?.[1] || "";
+        vBox.innerHTML = `<iframe src="https://www.youtube.com/embed/${id}?autoplay=1" style="width: 100%; height: 100%; border: none;" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>`;
+      } else {
+        vBox.innerHTML = `<video src="${ep.url}" controls autoplay playsinline style="width: 100%; height: 100%;"></video>`;
       }
       document.querySelectorAll(".ep-btn").forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
